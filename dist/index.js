@@ -14,6 +14,10 @@ var _propTypes = require('prop-types');
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
+var _v = require('uuid/v4');
+
+var _v2 = _interopRequireDefault(_v);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -44,13 +48,16 @@ var GoogleRecaptcha = function (_React$Component) {
           badge = _props.badge,
           onResolved = _props.onResolved;
 
-      window.GoogleRecaptchaResolved = onResolved;
-      window.GoogleRecaptchaLoaded = function () {
+      this.callbackName = 'GoogleRecaptchaResolved-' + (0, _v2.default)();
+
+      window[this.callbackName] = onResolved;
+
+      var initialize = function initialize() {
         var recaptchaId = grecaptcha.render(_this2.container, {
           sitekey: sitekey,
           size: 'invisible',
           badge: badge,
-          callback: 'GoogleRecaptchaResolved'
+          callback: _this2.callbackName
         });
         _this2.execute = function () {
           return grecaptcha.execute(recaptchaId);
@@ -63,7 +70,13 @@ var GoogleRecaptcha = function (_React$Component) {
         };
       };
 
-      if (!recaptchaScript) {
+      if (recaptchaScript) {
+        initialize();
+      } else {
+        window.GoogleRecaptchaLoaded = function () {
+          return initialize();
+        };
+
         var script = document.createElement('script');
         script.id = 'recaptcha';
         script.src = 'https://www.google.com/recaptcha/api.js?hl=' + locale + '&onload=GoogleRecaptchaLoaded&render=explicit';
@@ -76,6 +89,11 @@ var GoogleRecaptcha = function (_React$Component) {
         document.body.appendChild(script);
         recaptchaScript = script;
       }
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      delete window[this.callbackName];
     }
   }, {
     key: 'render',

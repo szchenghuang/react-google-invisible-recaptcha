@@ -1,25 +1,33 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import uuid from 'uuid/v4';
 
 let recaptchaScript;
 
 class GoogleRecaptcha extends React.Component {
   componentDidMount() {
     const { sitekey, locale, badge, onResolved } = this.props;
-    window.GoogleRecaptchaResolved = onResolved;
-    window.GoogleRecaptchaLoaded = () => {
+    this.callbackName = 'GoogleRecaptchaResolved-' + uuid();
+
+    window[ this.callbackName ] = onResolved;
+
+    const initialize = () => {
       const recaptchaId = grecaptcha.render( this.container, {
         sitekey,
         size: 'invisible',
         badge,
-        callback: 'GoogleRecaptchaResolved'
+        callback: this.callbackName
       });
       this.execute = () => grecaptcha.execute( recaptchaId );
       this.reset = () => grecaptcha.reset( recaptchaId );
       this.getResponse = () => grecaptcha.getResponse( recaptchaId );
     };
 
-    if ( !recaptchaScript ) {
+    if ( recaptchaScript ) {
+      initialize();
+    } else {
+      window.GoogleRecaptchaLoaded = () => initialize();
+
       const script = document.createElement( 'script' );
       script.id = 'recaptcha';
       script.src = `https://www.google.com/recaptcha/api.js?hl=${locale}&onload=GoogleRecaptchaLoaded&render=explicit`;
@@ -30,6 +38,9 @@ class GoogleRecaptcha extends React.Component {
       document.body.appendChild( script );
       recaptchaScript = script;
     }
+  }
+  componentWillUnmount() {
+    delete window[ this.callbackName ];
   }
   render() {
     return (

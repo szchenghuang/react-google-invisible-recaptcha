@@ -21907,6 +21907,10 @@
 
 	var _propTypes2 = _interopRequireDefault(_propTypes);
 
+	var _v = __webpack_require__(187);
+
+	var _v2 = _interopRequireDefault(_v);
+
 	function _interopRequireDefault(obj) {
 	  return obj && obj.__esModule ? obj : { default: obj };
 	}
@@ -21951,13 +21955,16 @@
 	          badge = _props.badge,
 	          onResolved = _props.onResolved;
 
-	      window.GoogleRecaptchaResolved = onResolved;
-	      window.GoogleRecaptchaLoaded = function () {
+	      this.callbackName = 'GoogleRecaptchaResolved-' + (0, _v2.default)();
+
+	      window[this.callbackName] = onResolved;
+
+	      var initialize = function initialize() {
 	        var recaptchaId = grecaptcha.render(_this2.container, {
 	          sitekey: sitekey,
 	          size: 'invisible',
 	          badge: badge,
-	          callback: 'GoogleRecaptchaResolved'
+	          callback: _this2.callbackName
 	        });
 	        _this2.execute = function () {
 	          return grecaptcha.execute(recaptchaId);
@@ -21970,7 +21977,13 @@
 	        };
 	      };
 
-	      if (!recaptchaScript) {
+	      if (recaptchaScript) {
+	        initialize();
+	      } else {
+	        window.GoogleRecaptchaLoaded = function () {
+	          return initialize();
+	        };
+
 	        var script = document.createElement('script');
 	        script.id = 'recaptcha';
 	        script.src = 'https://www.google.com/recaptcha/api.js?hl=' + locale + '&onload=GoogleRecaptchaLoaded&render=explicit';
@@ -21983,6 +21996,11 @@
 	        document.body.appendChild(script);
 	        recaptchaScript = script;
 	      }
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      delete window[this.callbackName];
 	    }
 	  }, {
 	    key: 'render',
@@ -22105,6 +22123,110 @@
 
 	  return ReactPropTypes;
 	};
+
+
+/***/ }),
+/* 187 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var rng = __webpack_require__(188);
+	var bytesToUuid = __webpack_require__(189);
+
+	function v4(options, buf, offset) {
+	  var i = buf && offset || 0;
+
+	  if (typeof(options) == 'string') {
+	    buf = options == 'binary' ? new Array(16) : null;
+	    options = null;
+	  }
+	  options = options || {};
+
+	  var rnds = options.random || (options.rng || rng)();
+
+	  // Per 4.4, set bits for version and `clock_seq_hi_and_reserved`
+	  rnds[6] = (rnds[6] & 0x0f) | 0x40;
+	  rnds[8] = (rnds[8] & 0x3f) | 0x80;
+
+	  // Copy bytes to buffer, if provided
+	  if (buf) {
+	    for (var ii = 0; ii < 16; ++ii) {
+	      buf[i + ii] = rnds[ii];
+	    }
+	  }
+
+	  return buf || bytesToUuid(rnds);
+	}
+
+	module.exports = v4;
+
+
+/***/ }),
+/* 188 */
+/***/ (function(module, exports) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {// Unique ID creation requires a high quality random # generator.  In the
+	// browser this is a little complicated due to unknown quality of Math.random()
+	// and inconsistent support for the `crypto` API.  We do the best we can via
+	// feature-detection
+	var rng;
+
+	var crypto = global.crypto || global.msCrypto; // for IE 11
+	if (crypto && crypto.getRandomValues) {
+	  // WHATWG crypto RNG - http://wiki.whatwg.org/wiki/Crypto
+	  var rnds8 = new Uint8Array(16);
+	  rng = function whatwgRNG() {
+	    crypto.getRandomValues(rnds8);
+	    return rnds8;
+	  };
+	}
+
+	if (!rng) {
+	  // Math.random()-based (RNG)
+	  //
+	  // If all else fails, use Math.random().  It's fast, but is of unspecified
+	  // quality.
+	  var  rnds = new Array(16);
+	  rng = function() {
+	    for (var i = 0, r; i < 16; i++) {
+	      if ((i & 0x03) === 0) r = Math.random() * 0x100000000;
+	      rnds[i] = r >>> ((i & 0x03) << 3) & 0xff;
+	    }
+
+	    return rnds;
+	  };
+	}
+
+	module.exports = rng;
+
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ }),
+/* 189 */
+/***/ (function(module, exports) {
+
+	/**
+	 * Convert array of 16 byte values to UUID string format of the form:
+	 * XXXXXXXX-XXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+	 */
+	var byteToHex = [];
+	for (var i = 0; i < 256; ++i) {
+	  byteToHex[i] = (i + 0x100).toString(16).substr(1);
+	}
+
+	function bytesToUuid(buf, offset) {
+	  var i = offset || 0;
+	  var bth = byteToHex;
+	  return  bth[buf[i++]] + bth[buf[i++]] +
+	          bth[buf[i++]] + bth[buf[i++]] + '-' +
+	          bth[buf[i++]] + bth[buf[i++]] + '-' +
+	          bth[buf[i++]] + bth[buf[i++]] + '-' +
+	          bth[buf[i++]] + bth[buf[i++]] + '-' +
+	          bth[buf[i++]] + bth[buf[i++]] +
+	          bth[buf[i++]] + bth[buf[i++]] +
+	          bth[buf[i++]] + bth[buf[i++]];
+	}
+
+	module.exports = bytesToUuid;
 
 
 /***/ })
