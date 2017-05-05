@@ -4,9 +4,11 @@ A React component which is simply interested in Google invisible reCAPTCHA. Pure
 
 ## [Demo][demo] ##
 
-Type something in the input box and click the button to submit data. The value is then checked to make up example client-side validation. Only valid input triggers reCAPTCHA. When reCAPTCHA is resolved, the demo page shows the result token for demo purpose. In a real application, it should be used in a HTTP request to `https://www.google.com/recaptcha/api/siteverify?secret=<secret>&response=<token>` on the server to validate the reCAPTCHA result before performing sensitive operation. Don't forget to check values derived from clients as well on the server.
+Type something in the input box and click the button to submit data. The value is then checked to make up example client-side validation. Only valid input triggers reCAPTCHA. Since the reCAPTCHA is invisible, it most likely proceeds as if none is attached. You will be present the figure of the reCAPTCHA only when Google hesitates to tell your identity.
 
-Below is it source.
+When reCAPTCHA is resolved, the demo page shows the result token for demo purpose. In a real application, it should be used in a HTTP request to `https://www.google.com/recaptcha/api/siteverify?secret=<secret>&response=<token>` on the server to validate the reCAPTCHA result before performing sensitive operation. Don't forget to check values derived from clients as well on the server.
+
+Below is its source.
 
 ```js
 class App extends React.Component {
@@ -69,7 +71,7 @@ Set two required props to get going.
 * sitekey: sitekey for your recaptcha. **Required.**
 * onResolved: callback when the recaptcha is resolved. **Required.**
 
-Optional props you can tweak.
+Optional prop you can tweak.
 
 * locale: in which language it speaks. **Default: en.**
 
@@ -79,9 +81,9 @@ Optional props you can tweak.
 <Recaptcha ref={ ref => this.recaptcha = ref } ... />
 ```
 
-* this.recaptcha.execute() invokes the reCAPTCHA check.
-* this.recaptcha.reset() resets the reCAPTCHA widget.
-* this.recaptcha.getResponse() returns the response token.
+* _this.recaptcha.execute_ function which invokes the reCAPTCHA check.
+* _this.recaptcha.reset_ function which resets the reCAPTCHA widget.
+* _this.recaptcha.getResponse_ function which returns the response token.
 
 ## License ##
 
