@@ -1,0 +1,60 @@
+{
+  "name": "react-google-invisible-recaptcha",
+  "author": "szchenghuang <szchenghuang@gmail.com>",
+  "version": "0.0.0",
+  "description": "A React component which is simply interested in Google invisible reCaptcha.",
+  "main": "index.js",
+  "keywords": [
+    "react",
+    "google",
+    "invisible",
+    "recaptcha"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/szchenghuang/react-google-invisible-recaptcha/issues"
+  },
+  "homepage": "https://github.com/szchenghuang/react-google-invisible-recaptcha#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/szchenghuang/react-google-invisible-recaptcha.git"
+  },
+  "scripts": {
+    "lint": "eslint src",
+    "prebuild:example": "rm -rf docs && mkdir docs",
+    "build:example": "webpack --config ./example/webpack.config.js",
+    "prebuild": "rm -rf dist && mkdir dist ",
+    "build": "babel ./src --out-dir ./dist",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "prop-types": "^15.5.8",
+    "react": "^15.5.4"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.14.0",
+    "babel-core": "^6.14.0",
+    "babel-eslint": "^6.1.2",
+    "babel-loader": "^6.2.5",
+    "babel-plugin-transform-object-rest-spread": "^6.23.0",
+    "babel-preset-es2015": "^6.13.2",
+    "babel-preset-react": "^6.1.18",
+    "babel-register": "^6.11.6",
+    "eslint": "^3.4.0",
+    "eslint-config-airbnb": "^10.0.1",
+    "eslint-config-google": "^0.6.0",
+    "eslint-config-standard": "^6.0.0",
+    "eslint-plugin-import": "^1.14.0",
+    "eslint-plugin-jsx-a11y": "^2.2.1",
+    "eslint-plugin-promise": "^2.0.1",
+    "eslint-plugin-react": "^6.2.0",
+    "eslint-plugin-standard": "^2.0.0",
+    "html-webpack-plugin": "^2.22.0",
+    "react-dom": "^15.5.4",
+    "webpack": "^1.13.2"
+  },
+  "directories": {
+    "doc": "docs",
+    "example": "example"
+  }
+}
