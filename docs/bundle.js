@@ -21881,7 +21881,7 @@
 /* 184 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	'use strict';
+	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
 
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
@@ -21970,7 +21970,7 @@
 	        };
 	      };
 
-	      if (!GoogleRecaptcha.script) {
+	      if (!global.script) {
 	        var script = document.createElement('script');
 	        script.id = 'recaptcha';
 	        script.src = 'https://www.google.com/recaptcha/api.js?hl=' + locale + '&onload=GoogleRecaptchaLoaded&render=explicit';
@@ -21981,7 +21981,7 @@
 	          throw error;
 	        };
 	        document.body.appendChild(script);
-	        GoogleRecaptcha.script = script;
+	        global.script = script;
 	      }
 	    }
 	  }, {
@@ -22011,6 +22011,7 @@
 	};
 
 	exports.default = GoogleRecaptcha;
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ }),
 /* 185 */

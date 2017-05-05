@@ -18,7 +18,7 @@ class GoogleRecaptcha extends React.Component {
       this.getResponse = () => grecaptcha.getResponse( recaptchaId );
     };
 
-    if ( !GoogleRecaptcha.script ) {
+    if ( !global.script ) {
       const script = document.createElement( 'script' );
       script.id = 'recaptcha';
       script.src = `https://www.google.com/recaptcha/api.js?hl=${locale}&onload=GoogleRecaptchaLoaded&render=explicit`;
@@ -27,7 +27,7 @@ class GoogleRecaptcha extends React.Component {
       script.defer = true;
       script.onerror = function( error ) { throw error; };
       document.body.appendChild( script );
-      GoogleRecaptcha.script = script;
+      global.script = script;
     }
   }
   render() {

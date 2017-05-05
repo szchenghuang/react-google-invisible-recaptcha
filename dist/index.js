@@ -63,7 +63,7 @@ var GoogleRecaptcha = function (_React$Component) {
         };
       };
 
-      if (!GoogleRecaptcha.script) {
+      if (!global.script) {
         var script = document.createElement('script');
         script.id = 'recaptcha';
         script.src = 'https://www.google.com/recaptcha/api.js?hl=' + locale + '&onload=GoogleRecaptchaLoaded&render=explicit';
@@ -74,7 +74,7 @@ var GoogleRecaptcha = function (_React$Component) {
           throw error;
         };
         document.body.appendChild(script);
-        GoogleRecaptcha.script = script;
+        global.script = script;
       }
     }
   }, {
