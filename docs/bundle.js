@@ -21881,7 +21881,7 @@
 /* 184 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
+	'use strict';
 
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
@@ -21929,6 +21929,8 @@
 	  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
 	}
 
+	var recaptchaScript = void 0;
+
 	var GoogleRecaptcha = function (_React$Component) {
 	  _inherits(GoogleRecaptcha, _React$Component);
 
@@ -21968,7 +21970,7 @@
 	        };
 	      };
 
-	      if (!global.script) {
+	      if (!recaptchaScript) {
 	        var script = document.createElement('script');
 	        script.id = 'recaptcha';
 	        script.src = 'https://www.google.com/recaptcha/api.js?hl=' + locale + '&onload=GoogleRecaptchaLoaded&render=explicit';
@@ -21979,7 +21981,7 @@
 	          throw error;
 	        };
 	        document.body.appendChild(script);
-	        global.script = script;
+	        recaptchaScript = script;
 	      }
 	    }
 	  }, {
@@ -22007,7 +22009,6 @@
 	};
 
 	exports.default = GoogleRecaptcha;
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ }),
 /* 185 */

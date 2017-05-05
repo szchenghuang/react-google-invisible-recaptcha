@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+let recaptchaScript;
+
 class GoogleRecaptcha extends React.Component {
   componentDidMount() {
     const { sitekey, locale, badge, onResolved } = this.props;
@@ -17,7 +19,7 @@ class GoogleRecaptcha extends React.Component {
       this.getResponse = () => grecaptcha.getResponse( recaptchaId );
     };
 
-    if ( !global.script ) {
+    if ( !recaptchaScript ) {
       const script = document.createElement( 'script' );
       script.id = 'recaptcha';
       script.src = `https://www.google.com/recaptcha/api.js?hl=${locale}&onload=GoogleRecaptchaLoaded&render=explicit`;
@@ -26,7 +28,7 @@ class GoogleRecaptcha extends React.Component {
       script.defer = true;
       script.onerror = function( error ) { throw error; };
       document.body.appendChild( script );
-      global.script = script;
+      recaptchaScript = script;
     }
   }
   render() {

@@ -22,6 +22,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var recaptchaScript = void 0;
+
 var GoogleRecaptcha = function (_React$Component) {
   _inherits(GoogleRecaptcha, _React$Component);
 
@@ -61,7 +63,7 @@ var GoogleRecaptcha = function (_React$Component) {
         };
       };
 
-      if (!global.script) {
+      if (!recaptchaScript) {
         var script = document.createElement('script');
         script.id = 'recaptcha';
         script.src = 'https://www.google.com/recaptcha/api.js?hl=' + locale + '&onload=GoogleRecaptchaLoaded&render=explicit';
@@ -72,7 +74,7 @@ var GoogleRecaptcha = function (_React$Component) {
           throw error;
         };
         document.body.appendChild(script);
-        global.script = script;
+        recaptchaScript = script;
       }
     }
   }, {
