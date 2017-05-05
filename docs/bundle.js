@@ -21947,11 +21947,9 @@
 	          sitekey = _props.sitekey,
 	          locale = _props.locale,
 	          badge = _props.badge,
-	          onResolved = _props.onResolved,
-	          onExpired = _props.onExpired;
+	          onResolved = _props.onResolved;
 
 	      window.GoogleRecaptchaResolved = onResolved;
-	      window.GoogleRecaptchaExpired = onExpired;
 	      window.GoogleRecaptchaLoaded = function () {
 	        var recaptchaId = grecaptcha.render(_this2.container, {
 	          sitekey: sitekey,
@@ -22001,13 +21999,11 @@
 	GoogleRecaptcha.propTypes = {
 	  sitekey: _propTypes2.default.string.isRequired,
 	  locale: _propTypes2.default.string,
-	  onResolved: _propTypes2.default.func.isRequired,
-	  onExpired: _propTypes2.default.func
+	  onResolved: _propTypes2.default.func.isRequired
 	};
 
 	GoogleRecaptcha.defaultProps = {
-	  locale: 'en',
-	  onExpired: function onExpired() {}
+	  locale: 'en'
 	};
 
 	exports.default = GoogleRecaptcha;

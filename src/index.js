@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 
 class GoogleRecaptcha extends React.Component {
   componentDidMount() {
-    const { sitekey, locale, badge, onResolved, onExpired } = this.props;
+    const { sitekey, locale, badge, onResolved } = this.props;
     window.GoogleRecaptchaResolved = onResolved;
-    window.GoogleRecaptchaExpired = onExpired;
     window.GoogleRecaptchaLoaded = () => {
       const recaptchaId = grecaptcha.render( this.container, {
         sitekey,
@@ -40,13 +39,11 @@ class GoogleRecaptcha extends React.Component {
 GoogleRecaptcha.propTypes = {
   sitekey: PropTypes.string.isRequired,
   locale: PropTypes.string,
-  onResolved: PropTypes.func.isRequired,
-  onExpired: PropTypes.func
+  onResolved: PropTypes.func.isRequired
 };
 
 GoogleRecaptcha.defaultProps = {
-  locale: 'en',
-  onExpired: () => {}
+  locale: 'en'
 };
 
 export default GoogleRecaptcha;

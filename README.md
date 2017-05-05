@@ -72,7 +72,6 @@ Set two required props to get going.
 Optional props you can tweak.
 
 * locale: in which language it speaks. **Default: en.**
-* onExpired: callback when the recaptcha is expired. **Default: function() {}.**
 
 ## APIs ##
 
