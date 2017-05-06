@@ -21933,8 +21933,6 @@
 	  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
 	}
 
-	var recaptchaScript = void 0;
-
 	var GoogleRecaptcha = function (_React$Component) {
 	  _inherits(GoogleRecaptcha, _React$Component);
 
@@ -21977,7 +21975,7 @@
 	        };
 	      };
 
-	      if (recaptchaScript) {
+	      if (document.querySelector('#recaptcha')) {
 	        initialize();
 	      } else {
 	        window.GoogleRecaptchaLoaded = function () {
@@ -21994,7 +21992,6 @@
 	          throw error;
 	        };
 	        document.body.appendChild(script);
-	        recaptchaScript = script;
 	      }
 	    }
 	  }, {

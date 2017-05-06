@@ -2,8 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import uuid from 'uuid/v4';
 
-let recaptchaScript;
-
 class GoogleRecaptcha extends React.Component {
   componentDidMount() {
     const { sitekey, locale, badge, onResolved } = this.props;
@@ -23,7 +21,7 @@ class GoogleRecaptcha extends React.Component {
       this.getResponse = () => grecaptcha.getResponse( recaptchaId );
     };
 
-    if ( recaptchaScript ) {
+    if ( document.querySelector( '#recaptcha' ) ) {
       initialize();
     } else {
       window.GoogleRecaptchaLoaded = () => initialize();
@@ -36,7 +34,6 @@ class GoogleRecaptcha extends React.Component {
       script.defer = true;
       script.onerror = function( error ) { throw error; };
       document.body.appendChild( script );
-      recaptchaScript = script;
     }
   }
   componentWillUnmount() {
