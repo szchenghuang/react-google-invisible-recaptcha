@@ -75,26 +75,36 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var App = function (_React$Component) {
-	  _inherits(App, _React$Component);
+	var Form = function (_React$Component) {
+	  _inherits(Form, _React$Component);
 
-	  function App(props) {
-	    _classCallCheck(this, App);
+	  function Form(props) {
+	    _classCallCheck(this, Form);
 
-	    var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
+	    var _this = _possibleConstructorReturn(this, (Form.__proto__ || Object.getPrototypeOf(Form)).call(this, props));
 
-	    _this.state = { value: '' };
+	    _this.state = { value: '', resolved: false };
+	    _this.onRestart = _this.onRestart.bind(_this);
 	    _this.onSubmit = _this.onSubmit.bind(_this);
 	    _this.onResolved = _this.onResolved.bind(_this);
 	    return _this;
 	  }
 
-	  _createClass(App, [{
+	  _createClass(Form, [{
 	    key: 'render',
 	    value: function render() {
 	      var _this2 = this;
 
-	      return _react2.default.createElement(
+	      return this.state.resolved ? _react2.default.createElement(
+	        'div',
+	        null,
+	        'Human detected!',
+	        _react2.default.createElement(
+	          'button',
+	          { onClick: this.onRestart },
+	          'Restart'
+	        )
+	      ) : _react2.default.createElement(
 	        'div',
 	        null,
 	        _react2.default.createElement('input', {
@@ -117,10 +127,15 @@
 	      );
 	    }
 	  }, {
+	    key: 'onRestart',
+	    value: function onRestart() {
+	      this.setState({ value: '', resolved: false });
+	    }
+	  }, {
 	    key: 'onSubmit',
 	    value: function onSubmit() {
-	      if ('' == this.state.value) {
-	        alert('Validation failed! Input cannot be empty.');
+	      if ('' == this.state.value1) {
+	        alert(this.props.name + ': Validation failed! Input cannot be empty.');
 	        this.recaptcha.reset();
 	      } else {
 	        this.recaptcha.execute();
@@ -129,15 +144,31 @@
 	  }, {
 	    key: 'onResolved',
 	    value: function onResolved() {
-	      alert('Recaptcha resolved with response: ' + this.recaptcha.getResponse());
+	      this.setState({ resolved: true });
+	      alert(this.props.name + ': Recaptcha resolved with response: ' + this.recaptcha.getResponse());
 	    }
 	  }]);
 
-	  return App;
+	  return Form;
 	}(_react2.default.Component);
 
 	window.onload = function () {
-	  _reactDom2.default.render(_react2.default.createElement(App, null), document.querySelector('#container'));
+	  _reactDom2.default.render(_react2.default.createElement(
+	    'div',
+	    null,
+	    _react2.default.createElement(
+	      'label',
+	      null,
+	      'Form 1'
+	    ),
+	    _react2.default.createElement(Form, { name: 'Form-1' }),
+	    _react2.default.createElement(
+	      'label',
+	      null,
+	      'Form 2'
+	    ),
+	    _react2.default.createElement(Form, { name: 'Form-2' })
+	  ), document.querySelector('#container'));
 	};
 
 /***/ }),
@@ -21933,6 +21964,28 @@
 	  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
 	}
 
+	var renderers = [];
+
+	var injectScript = function injectScript(locale) {
+	  window.GoogleRecaptchaLoaded = function () {
+	    while (renderers.length) {
+	      var renderer = renderers.pop();
+	      renderer();
+	    }
+	  };
+
+	  var script = document.createElement('script');
+	  script.id = 'recaptcha';
+	  script.src = 'https://www.google.com/recaptcha/api.js?hl=' + locale + '&onload=GoogleRecaptchaLoaded&render=explicit';
+	  script.type = 'text/javascript';
+	  script.async = true;
+	  script.defer = true;
+	  script.onerror = function (error) {
+	    throw error;
+	  };
+	  document.body.appendChild(script);
+	};
+
 	var GoogleRecaptcha = function (_React$Component) {
 	  _inherits(GoogleRecaptcha, _React$Component);
 
@@ -21954,44 +22007,33 @@
 	          onResolved = _props.onResolved;
 
 	      this.callbackName = 'GoogleRecaptchaResolved-' + (0, _v2.default)();
-
 	      window[this.callbackName] = onResolved;
 
-	      var initialize = function initialize() {
-	        var recaptchaId = grecaptcha.render(_this2.container, {
+	      var loaded = function loaded() {
+	        var recaptchaId = window.grecaptcha.render(_this2.container, {
 	          sitekey: sitekey,
 	          size: 'invisible',
 	          badge: badge,
 	          callback: _this2.callbackName
 	        });
 	        _this2.execute = function () {
-	          return grecaptcha.execute(recaptchaId);
+	          return window.grecaptcha.execute(recaptchaId);
 	        };
 	        _this2.reset = function () {
-	          return grecaptcha.reset(recaptchaId);
+	          return window.grecaptcha.reset(recaptchaId);
 	        };
 	        _this2.getResponse = function () {
-	          return grecaptcha.getResponse(recaptchaId);
+	          return window.grecaptcha.getResponse(recaptchaId);
 	        };
 	      };
 
-	      if (document.querySelector('#recaptcha')) {
-	        initialize();
+	      if (window.grecaptcha) {
+	        loaded();
 	      } else {
-	        window.GoogleRecaptchaLoaded = function () {
-	          return initialize();
-	        };
-
-	        var script = document.createElement('script');
-	        script.id = 'recaptcha';
-	        script.src = 'https://www.google.com/recaptcha/api.js?hl=' + locale + '&onload=GoogleRecaptchaLoaded&render=explicit';
-	        script.type = 'text/javascript';
-	        script.async = true;
-	        script.defer = true;
-	        script.onerror = function (error) {
-	          throw error;
-	        };
-	        document.body.appendChild(script);
+	        renderers.push(loaded);
+	        if (!document.querySelector('#recaptcha')) {
+	          injectScript(locale, loaded);
+	        }
 	      }
 	    }
 	  }, {

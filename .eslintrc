@@ -7,9 +7,6 @@
         "amd": true,
         "jquery": true
     },
-    "globals": {
-        "grecaptcha": true
-    },
     "extends": [ "eslint:recommended" ],
     "ecmaFeatures": {
         "jsx": true,

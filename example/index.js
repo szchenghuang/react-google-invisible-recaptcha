@@ -4,15 +4,21 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Recaptcha from '../';
 
-class App extends React.Component {
+class Form extends React.Component {
   constructor( props ) {
     super( props );
-    this.state = { value: '' };
+    this.state = { value: '', resolved: false };
+    this.onRestart = this.onRestart.bind( this );
     this.onSubmit = this.onSubmit.bind( this );
     this.onResolved = this.onResolved.bind( this );
   }
   render() {
-    return (
+    return this.state.resolved ? (
+      <div>
+        Human detected!
+        <button onClick={ this.onRestart }>Restart</button>
+      </div>
+    ) : (
       <div>
         <input
           type="text"
@@ -26,22 +32,31 @@ class App extends React.Component {
       </div>
     );
   }
+  onRestart() {
+    this.setState( { value: '', resolved: false } );
+  }
   onSubmit() {
-    if ( '' == this.state.value ) {
-      alert( 'Validation failed! Input cannot be empty.' );
+    if ( '' == this.state.value1 ) {
+      alert( this.props.name + ': Validation failed! Input cannot be empty.' );
       this.recaptcha.reset();
     } else {
       this.recaptcha.execute();
     }
   }
   onResolved() {
-    alert( 'Recaptcha resolved with response: ' + this.recaptcha.getResponse() );
+    this.setState( { resolved: true } );
+    alert( this.props.name + ': Recaptcha resolved with response: ' + this.recaptcha.getResponse() );
   }
 }
 
 window.onload = () => {
   ReactDOM.render(
-    <App />,
+    <div>
+      <label>Form 1</label>
+      <Form name="Form-1" />
+      <label>Form 2</label>
+      <Form name="Form-2" />
+    </div>,
     document.querySelector( '#container' )
   );
 };

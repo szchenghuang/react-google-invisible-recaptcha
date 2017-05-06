@@ -26,6 +26,28 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var renderers = [];
+
+var injectScript = function injectScript(locale) {
+  window.GoogleRecaptchaLoaded = function () {
+    while (renderers.length) {
+      var renderer = renderers.pop();
+      renderer();
+    }
+  };
+
+  var script = document.createElement('script');
+  script.id = 'recaptcha';
+  script.src = 'https://www.google.com/recaptcha/api.js?hl=' + locale + '&onload=GoogleRecaptchaLoaded&render=explicit';
+  script.type = 'text/javascript';
+  script.async = true;
+  script.defer = true;
+  script.onerror = function (error) {
+    throw error;
+  };
+  document.body.appendChild(script);
+};
+
 var GoogleRecaptcha = function (_React$Component) {
   _inherits(GoogleRecaptcha, _React$Component);
 
@@ -46,45 +68,35 @@ var GoogleRecaptcha = function (_React$Component) {
           badge = _props.badge,
           onResolved = _props.onResolved;
 
-      this.callbackName = 'GoogleRecaptchaResolved-' + (0, _v2.default)();
 
+      this.callbackName = 'GoogleRecaptchaResolved-' + (0, _v2.default)();
       window[this.callbackName] = onResolved;
 
-      var initialize = function initialize() {
-        var recaptchaId = grecaptcha.render(_this2.container, {
+      var loaded = function loaded() {
+        var recaptchaId = window.grecaptcha.render(_this2.container, {
           sitekey: sitekey,
           size: 'invisible',
           badge: badge,
           callback: _this2.callbackName
         });
         _this2.execute = function () {
-          return grecaptcha.execute(recaptchaId);
+          return window.grecaptcha.execute(recaptchaId);
         };
         _this2.reset = function () {
-          return grecaptcha.reset(recaptchaId);
+          return window.grecaptcha.reset(recaptchaId);
         };
         _this2.getResponse = function () {
-          return grecaptcha.getResponse(recaptchaId);
+          return window.grecaptcha.getResponse(recaptchaId);
         };
       };
 
-      if (document.querySelector('#recaptcha')) {
-        initialize();
+      if (window.grecaptcha) {
+        loaded();
       } else {
-        window.GoogleRecaptchaLoaded = function () {
-          return initialize();
-        };
-
-        var script = document.createElement('script');
-        script.id = 'recaptcha';
-        script.src = 'https://www.google.com/recaptcha/api.js?hl=' + locale + '&onload=GoogleRecaptchaLoaded&render=explicit';
-        script.type = 'text/javascript';
-        script.async = true;
-        script.defer = true;
-        script.onerror = function (error) {
-          throw error;
-        };
-        document.body.appendChild(script);
+        renderers.push(loaded);
+        if (!document.querySelector('#recaptcha')) {
+          injectScript(locale, loaded);
+        }
       }
     }
   }, {
