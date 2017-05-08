@@ -1,6 +1,10 @@
 # react-google-invisible-recaptcha #
 
-A React component which is simply interested in Google invisible reCAPTCHA. Pure implementation without external dependency.
+A React component which is simply interested in Google invisible reCAPTCHA.
+
+* Support multiple reCAPTCHA widgets on one page.
+* Vallina JS.
+* No dependency.
 
 ## [Demo][demo] ##
 
@@ -30,7 +34,7 @@ class Example extends React.Component {
         <button onClick={ this.onSubmit }>Submit</button>
         <Recaptcha
           ref={ ref => this.recaptcha = ref }
-          sitekey="6LeH_x8UAAAAAKKuaaod4GsENkTJTHdeQIm8l6y2"
+          sitekey="<sitekey>"
           onResolved={ this.onResolved } />
       </div>
     );
