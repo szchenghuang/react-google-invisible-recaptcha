@@ -30,15 +30,17 @@ class GoogleRecaptcha extends React.Component {
     window[ this.callbackName ] = onResolved;
 
     const loaded = () => {
-      const recaptchaId = window.grecaptcha.render( this.container, {
-        sitekey,
-        size: 'invisible',
-        badge,
-        callback: this.callbackName
-      });
-      this.execute = () => window.grecaptcha.execute( recaptchaId );
-      this.reset = () => window.grecaptcha.reset( recaptchaId );
-      this.getResponse = () => window.grecaptcha.getResponse( recaptchaId );
+      if ( this.container ) {
+        const recaptchaId = window.grecaptcha.render( this.container, {
+          sitekey,
+          size: 'invisible',
+          badge,
+          callback: this.callbackName
+        });
+        this.execute = () => window.grecaptcha.execute( recaptchaId );
+        this.reset = () => window.grecaptcha.reset( recaptchaId );
+        this.getResponse = () => window.grecaptcha.getResponse( recaptchaId );
+      }
     };
 
     if ( window.grecaptcha ) {
@@ -52,6 +54,7 @@ class GoogleRecaptcha extends React.Component {
   }
   componentWillUnmount() {
     delete window[ this.callbackName ];
+    delete this.container;
   }
   render() {
     return (

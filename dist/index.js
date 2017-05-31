@@ -73,21 +73,23 @@ var GoogleRecaptcha = function (_React$Component) {
       window[this.callbackName] = onResolved;
 
       var loaded = function loaded() {
-        var recaptchaId = window.grecaptcha.render(_this2.container, {
-          sitekey: sitekey,
-          size: 'invisible',
-          badge: badge,
-          callback: _this2.callbackName
-        });
-        _this2.execute = function () {
-          return window.grecaptcha.execute(recaptchaId);
-        };
-        _this2.reset = function () {
-          return window.grecaptcha.reset(recaptchaId);
-        };
-        _this2.getResponse = function () {
-          return window.grecaptcha.getResponse(recaptchaId);
-        };
+        if (_this2.container) {
+          var recaptchaId = window.grecaptcha.render(_this2.container, {
+            sitekey: sitekey,
+            size: 'invisible',
+            badge: badge,
+            callback: _this2.callbackName
+          });
+          _this2.execute = function () {
+            return window.grecaptcha.execute(recaptchaId);
+          };
+          _this2.reset = function () {
+            return window.grecaptcha.reset(recaptchaId);
+          };
+          _this2.getResponse = function () {
+            return window.grecaptcha.getResponse(recaptchaId);
+          };
+        }
       };
 
       if (window.grecaptcha) {
@@ -103,6 +105,7 @@ var GoogleRecaptcha = function (_React$Component) {
     key: 'componentWillUnmount',
     value: function componentWillUnmount() {
       delete window[this.callbackName];
+      delete this.container;
     }
   }, {
     key: 'render',
