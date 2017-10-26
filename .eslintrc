@@ -1,5 +1,12 @@
 {
     "parser": "babel-eslint",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true,
+            "experimentalObjectRestSpread": true,
+            "modules": true
+        }
+    },
     "env": {
         "es6": true,
         "browser": true,
@@ -8,11 +15,6 @@
         "jquery": true
     },
     "extends": [ "eslint:recommended" ],
-    "ecmaFeatures": {
-        "jsx": true,
-        "experimentalObjectRestSpread": true,
-        "modules": true
-    },
     "plugins": [
         "react"
     ],

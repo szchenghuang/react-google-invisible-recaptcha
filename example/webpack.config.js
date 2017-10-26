@@ -19,19 +19,19 @@ const config = {
     filename: 'bundle.js'
   },
   resolve: {
-    extensions: [ '', '.js', '.jsx' ]
+    extensions: [ '.js', '.jsx' ]
   },
   module: {
-    preLoaders: [ {
+    rules: [ {
       test: /\.css$/,
+      enforce: 'pre',
       loaders: [ 'postcss-loader' ],
       include: [ PATHS.lib, PATHS.src ]
-    } ],
-    loaders: [ {
+    }, {
       test: /\.jsx?$/,
       loaders: [ 'babel-loader' ],
       include: [ PATHS.lib, PATHS.src ]
-    }]
+    } ]
   },
   plugins: [
     new HTMLWebpackPlugin({
