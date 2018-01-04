@@ -126,7 +126,7 @@ GoogleRecaptcha.propTypes = {
   sitekey: _propTypes2.default.string.isRequired,
   locale: _propTypes2.default.string,
   onResolved: _propTypes2.default.func.isRequired,
-  display: _propTypes2.default.boolean
+  display: _propTypes2.default.bool
 };
 
 GoogleRecaptcha.defaultProps = {
