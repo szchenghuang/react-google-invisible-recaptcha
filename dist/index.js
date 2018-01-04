@@ -112,9 +112,10 @@ var GoogleRecaptcha = function (_React$Component) {
     value: function render() {
       var _this3 = this;
 
+      var style = this.props.display ? {} : { display: 'none' };
       return _react2.default.createElement('div', { ref: function ref(_ref) {
           return _this3.container = _ref;
-        }, style: { display: 'none' } });
+        }, style: style });
     }
   }]);
 
@@ -124,11 +125,13 @@ var GoogleRecaptcha = function (_React$Component) {
 GoogleRecaptcha.propTypes = {
   sitekey: _propTypes2.default.string.isRequired,
   locale: _propTypes2.default.string,
-  onResolved: _propTypes2.default.func.isRequired
+  onResolved: _propTypes2.default.func.isRequired,
+  display: _propTypes2.default.boolean
 };
 
 GoogleRecaptcha.defaultProps = {
-  locale: 'en'
+  locale: 'en',
+  display: false
 };
 
 exports.default = GoogleRecaptcha;
