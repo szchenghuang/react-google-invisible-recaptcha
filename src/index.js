@@ -70,7 +70,7 @@ GoogleRecaptcha.propTypes = {
   sitekey: PropTypes.string.isRequired,
   locale: PropTypes.string,
   onResolved: PropTypes.func.isRequired,
-  display: PropTypes.boolean,
+  display: PropTypes.bool,
 };
 
 GoogleRecaptcha.defaultProps = {
