@@ -80,6 +80,7 @@ Set two required props to get going.
 Optional prop you can tweak.
 
 * locale: in which language it speaks. **Default: en.**
+* style: custom CSS applied to the root node. **Default: undefined.**
 
 ## APIs ##
 
