@@ -10,7 +10,7 @@ A React component which is simply interested in Google invisible reCAPTCHA.
 
 Type something in an input box and click the button to submit data. The value is then checked to make up example client-side validation. Only valid input triggers reCAPTCHA. Since the reCAPTCHA is invisible, it proceeds most likely as if none is attached. You will only be present the figure of the reCAPTCHA when Google hesitates to tell your identity.
 
-When reCAPTCHA is resolved, the demo page shows the result token for demo purpose. In a real application, it should be used with a HTTP request targeting at `https://www.google.com/recaptcha/api/siteverify?secret=<secret>&response=<token>` on the server to validate the reCAPTCHA result before any sensitive operation is performed. Also, don't forget to check input values derived from clients as well on the server.
+When reCAPTCHA is resolved, the demo page shows the result token for demo purpose. In a real application, it should be used with a HTTP request targeting at `https://www.google.com/recaptcha/api/siteverify?secret=<secret>&response=<token>` on the server to validate the reCAPTCHA result before any sensitive operation is performed. Checking input values derived from clients on the server imporves security as well.
 
 ## Example ##
 
@@ -72,12 +72,12 @@ import Recaptcha from 'react-google-invisible-recaptcha';
 
 ## Configuration ##
 
-Set two required props to get going.
+Set required props to get going.
 
 * sitekey: sitekey for your recaptcha. **Required.**
 * onResolved: callback when the recaptcha is resolved. **Required.**
 
-Optional prop you can tweak.
+A few optional props you can tweak.
 
 * locale: in which language it speaks. **Default: en.**
 * style: custom CSS applied to the root node. **Default: undefined.**
