@@ -36,7 +36,7 @@ class Form extends React.Component {
     this.setState( { value: '', resolved: false } );
   }
   onSubmit() {
-    if ( '' == this.state.value1 ) {
+    if ( '' == this.state.value ) {
       alert( this.props.name + ': Validation failed! Input cannot be empty.' );
       this.recaptcha.reset();
     } else {
