@@ -44,8 +44,8 @@ class Form extends React.Component {
     }
   }
   onResolved() {
-    this.setState( { resolved: true } );
     alert( this.props.name + ': Recaptcha resolved with response: ' + this.recaptcha.getResponse() );
+    this.setState( { resolved: true } );
   }
 }
 

@@ -1082,7 +1082,7 @@ var Form = function (_React$Component) {
   }, {
     key: 'onSubmit',
     value: function onSubmit() {
-      if ('' == this.state.value1) {
+      if ('' == this.state.value) {
         alert(this.props.name + ': Validation failed! Input cannot be empty.');
         this.recaptcha.reset();
       } else {
@@ -1092,8 +1092,8 @@ var Form = function (_React$Component) {
   }, {
     key: 'onResolved',
     value: function onResolved() {
-      this.setState({ resolved: true });
       alert(this.props.name + ': Recaptcha resolved with response: ' + this.recaptcha.getResponse());
+      this.setState({ resolved: true });
     }
   }]);
 
