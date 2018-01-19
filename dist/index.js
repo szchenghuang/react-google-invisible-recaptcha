@@ -82,14 +82,22 @@ var GoogleRecaptcha = function (_React$Component) {
             badge: badge,
             callback: _this2.callbackName
           });
-          _this2.execute = function () {
-            return window.grecaptcha.execute(recaptchaId);
-          };
           _this2.reset = function () {
             return window.grecaptcha.reset(recaptchaId);
           };
           _this2.getResponse = function () {
             return window.grecaptcha.getResponse(recaptchaId);
+          };
+          _this2.execute = function () {
+            return new Promise(function (resolve) {
+              // patch callback to return promise
+              var callback = window[_this2.callbackName];
+              window[_this2.callbackName] = function () {
+                resolve(_this2.getResponse());
+                callback.apply(undefined, arguments);
+              };
+              window.grecaptcha.execute(recaptchaId);
+            });
           };
         }
       };

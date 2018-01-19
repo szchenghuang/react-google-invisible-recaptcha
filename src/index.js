@@ -37,9 +37,17 @@ class GoogleRecaptcha extends React.Component {
           badge,
           callback: this.callbackName
         });
-        this.execute = () => window.grecaptcha.execute( recaptchaId );
         this.reset = () => window.grecaptcha.reset( recaptchaId );
         this.getResponse = () => window.grecaptcha.getResponse( recaptchaId );
+        this.execute = () => new Promise(resolve => {
+          // patch callback to return promise
+          const callback = window[ this.callbackName ];
+          window[ this.callbackName ] = (...args) => {
+            resolve(this.getResponse());
+            callback(...args);
+          };
+          window.grecaptcha.execute(recaptchaId);
+        });
       }
     };
 
