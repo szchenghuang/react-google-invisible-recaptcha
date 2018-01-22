@@ -79,6 +79,7 @@ Set required props to get going.
 A few optional props you can tweak.
 
 * locale: in which language it speaks. **Default: en.**
+* badge: `bottomright`, `bottomleft`, or `inline`. **Default: bottomright.**
 * style: custom CSS applied to the root node. **Default: undefined.**
 
 ## APIs ##

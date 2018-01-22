@@ -57,7 +57,7 @@ class GoogleRecaptcha extends React.Component {
     delete this.container;
   }
   render() {
-    const style = { display: 'none', ...this.props.style };
+    const { style } = this.props;
     return (
       <div ref={ ref => this.container = ref } style={ style } />
     );
@@ -67,12 +67,14 @@ class GoogleRecaptcha extends React.Component {
 GoogleRecaptcha.propTypes = {
   sitekey: PropTypes.string.isRequired,
   locale: PropTypes.string,
+  badge: PropTypes.oneOf( [ 'bottomright', 'bottomleft', 'inline' ] ),
   onResolved: PropTypes.func.isRequired,
   style: PropTypes.object
 };
 
 GoogleRecaptcha.defaultProps = {
-  locale: 'en'
+  locale: 'en',
+  badge: 'bottomright'
 };
 
 export default GoogleRecaptcha;

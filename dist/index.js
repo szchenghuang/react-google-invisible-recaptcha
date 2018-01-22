@@ -4,8 +4,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = require('react');
@@ -114,7 +112,8 @@ var GoogleRecaptcha = function (_React$Component) {
     value: function render() {
       var _this3 = this;
 
-      var style = _extends({ display: 'none' }, this.props.style);
+      var style = this.props.style;
+
       return _react2.default.createElement('div', { ref: function ref(_ref) {
           return _this3.container = _ref;
         }, style: style });
@@ -127,12 +126,14 @@ var GoogleRecaptcha = function (_React$Component) {
 GoogleRecaptcha.propTypes = {
   sitekey: _propTypes2.default.string.isRequired,
   locale: _propTypes2.default.string,
+  badge: _propTypes2.default.oneOf(['bottomright', 'bottomleft', 'inline']),
   onResolved: _propTypes2.default.func.isRequired,
   style: _propTypes2.default.object
 };
 
 GoogleRecaptcha.defaultProps = {
-  locale: 'en'
+  locale: 'en',
+  badge: 'bottomright'
 };
 
 exports.default = GoogleRecaptcha;
