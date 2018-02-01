@@ -66,7 +66,8 @@ var GoogleRecaptcha = function (_React$Component) {
           sitekey = _props.sitekey,
           locale = _props.locale,
           badge = _props.badge,
-          onResolved = _props.onResolved;
+          onResolved = _props.onResolved,
+          onLoad = _props.onLoad;
 
 
       this.callbackName = 'GoogleRecaptchaResolved-' + (0, _v2.default)();
@@ -89,6 +90,7 @@ var GoogleRecaptcha = function (_React$Component) {
           _this2.getResponse = function () {
             return window.grecaptcha.getResponse(recaptchaId);
           };
+          onLoad();
         }
       };
 
@@ -128,12 +130,14 @@ GoogleRecaptcha.propTypes = {
   locale: _propTypes2.default.string,
   badge: _propTypes2.default.oneOf(['bottomright', 'bottomleft', 'inline']),
   onResolved: _propTypes2.default.func.isRequired,
+  onLoad: _propTypes2.default.func,
   style: _propTypes2.default.object
 };
 
 GoogleRecaptcha.defaultProps = {
   locale: 'en',
-  badge: 'bottomright'
+  badge: 'bottomright',
+  onLoad: function onLoad() {}
 };
 
 exports.default = GoogleRecaptcha;
