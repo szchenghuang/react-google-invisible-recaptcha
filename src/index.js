@@ -49,7 +49,7 @@ class GoogleRecaptcha extends React.Component {
     } else {
       renderers.push( loaded );
       if ( !document.querySelector( '#recaptcha' ) ) {
-        injectScript( locale, loaded );
+        injectScript( locale );
       }
     }
   }
