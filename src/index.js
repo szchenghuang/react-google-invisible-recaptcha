@@ -24,7 +24,7 @@ const injectScript = locale => {
 
 class GoogleRecaptcha extends React.Component {
   componentDidMount() {
-    const { sitekey, locale, badge, onResolved } = this.props;
+    const { sitekey, locale, badge, onResolved, onLoad } = this.props;
 
     this.callbackName = 'GoogleRecaptchaResolved-' + uuid();
     window[ this.callbackName ] = onResolved;
@@ -40,6 +40,7 @@ class GoogleRecaptcha extends React.Component {
         this.execute = () => window.grecaptcha.execute( recaptchaId );
         this.reset = () => window.grecaptcha.reset( recaptchaId );
         this.getResponse = () => window.grecaptcha.getResponse( recaptchaId );
+        onLoad();
       }
     };
 
@@ -69,12 +70,14 @@ GoogleRecaptcha.propTypes = {
   locale: PropTypes.string,
   badge: PropTypes.oneOf( [ 'bottomright', 'bottomleft', 'inline' ] ),
   onResolved: PropTypes.func.isRequired,
+  onLoad: PropTypes.func,
   style: PropTypes.object
 };
 
 GoogleRecaptcha.defaultProps = {
   locale: 'en',
-  badge: 'bottomright'
+  badge: 'bottomright',
+  onLoad: () => {},
 };
 
 export default GoogleRecaptcha;
