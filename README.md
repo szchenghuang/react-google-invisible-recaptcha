@@ -81,7 +81,7 @@ A few optional props you can tweak.
 * locale: in which language it speaks. **Default: en.**
 * badge: `bottomright`, `bottomleft`, or `inline`. **Default: bottomright.**
 * style: custom CSS applied to the root node. **Default: undefined.**
-* onLoad: callback when the recaptcha loads. **Default: noop.**
+* onLoaded: callback when the recaptcha is loaded. **Default: noop.**
 
 ## APIs ##
 
