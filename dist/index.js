@@ -94,7 +94,7 @@ var GoogleRecaptcha = function (_React$Component) {
         }
       };
 
-      if (window.grecaptcha) {
+      if (window.grecaptcha.render) {
         loaded();
       } else {
         renderers.push(loaded);
