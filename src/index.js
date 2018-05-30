@@ -7,7 +7,7 @@ const renderers = [];
 const injectScript = locale => {
   window.GoogleRecaptchaLoaded = () => {
     while ( renderers.length ) {
-      const renderer = renderers.pop();
+      const renderer = renderers.shift();
       renderer();
     }
   };

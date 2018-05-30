@@ -21352,7 +21352,7 @@ var renderers = [];
 var injectScript = function injectScript(locale) {
   window.GoogleRecaptchaLoaded = function () {
     while (renderers.length) {
-      var renderer = renderers.pop();
+      var renderer = renderers.shift();
       renderer();
     }
   };
