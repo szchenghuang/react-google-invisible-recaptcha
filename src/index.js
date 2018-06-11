@@ -31,12 +31,14 @@ class GoogleRecaptcha extends React.Component {
 
     const loaded = () => {
       if ( this.container ) {
-        const recaptchaId = window.grecaptcha.render( this.container, {
+        const wrapper = document.createElement("div");
+        const recaptchaId = window.grecaptcha.render( wrapper, {
           sitekey,
           size: 'invisible',
           badge,
           callback: this.callbackName
         });
+        this.container.appendChild(wrapper);
         this.execute = () => window.grecaptcha.execute( recaptchaId );
         this.reset = () => window.grecaptcha.reset( recaptchaId );
         this.getResponse = () => window.grecaptcha.getResponse( recaptchaId );
@@ -59,8 +61,11 @@ class GoogleRecaptcha extends React.Component {
     }
   }
   componentWillUnmount() {
+    while (this.container.firstChild) {
+      this.container.removeChild(this.container.firstChild);
+    }
+    this.reset();
     delete window[ this.callbackName ];
-    delete this.container;
   }
   render() {
     const { style } = this.props;
