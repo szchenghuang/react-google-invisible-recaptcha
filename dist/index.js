@@ -75,12 +75,14 @@ var GoogleRecaptcha = function (_React$Component) {
 
       var loaded = function loaded() {
         if (_this2.container) {
-          var recaptchaId = window.grecaptcha.render(_this2.container, {
+          var wrapper = document.createElement("div");
+          var recaptchaId = window.grecaptcha.render(wrapper, {
             sitekey: sitekey,
             size: 'invisible',
             badge: badge,
             callback: _this2.callbackName
           });
+          _this2.container.appendChild(wrapper);
           _this2.execute = function () {
             return window.grecaptcha.execute(recaptchaId);
           };
@@ -106,8 +108,11 @@ var GoogleRecaptcha = function (_React$Component) {
   }, {
     key: 'componentWillUnmount',
     value: function componentWillUnmount() {
+      while (this.container.firstChild) {
+        this.container.removeChild(this.container.firstChild);
+      }
+      this.reset();
       delete window[this.callbackName];
-      delete this.container;
     }
   }, {
     key: 'render',
