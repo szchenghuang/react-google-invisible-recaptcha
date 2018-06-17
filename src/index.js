@@ -31,7 +31,7 @@ class GoogleRecaptcha extends React.Component {
 
     const loaded = () => {
       if ( this.container ) {
-        const wrapper = document.createElement("div");
+        const wrapper = document.createElement( 'div' );
         const recaptchaId = window.grecaptcha.render( wrapper, {
           sitekey,
           size: 'invisible',
@@ -61,8 +61,8 @@ class GoogleRecaptcha extends React.Component {
     }
   }
   componentWillUnmount() {
-    while (this.container.firstChild) {
-      this.container.removeChild(this.container.firstChild);
+    while ( this.container.firstChild ) {
+      this.container.removeChild( this.container.firstChild );
     }
     this.reset();
     delete window[ this.callbackName ];
@@ -70,7 +70,9 @@ class GoogleRecaptcha extends React.Component {
   render() {
     const { style } = this.props;
     return (
-      <div ref={ ref => this.container = ref } style={ style } />
+      <div
+        ref={ ref => this.container = ref }
+        { ...( style && { style } ) } />
     );
   }
 }
