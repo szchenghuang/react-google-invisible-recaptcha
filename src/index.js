@@ -64,7 +64,6 @@ class GoogleRecaptcha extends React.Component {
     while ( this.container.firstChild ) {
       this.container.removeChild( this.container.firstChild );
     }
-    this.reset();
     delete window[ this.callbackName ];
   }
   render() {
