@@ -74,14 +74,17 @@ import Recaptcha from 'react-google-invisible-recaptcha';
 Set required props to get going.
 
 * sitekey: sitekey for your recaptcha. **Required.**
-* onResolved: callback when the recaptcha is resolved. **Required.**
 
 A few optional props you can tweak.
 
 * locale: in which language it speaks. **Default: en.**
 * badge: `bottomright`, `bottomleft`, or `inline`. **Default: bottomright.**
-* style: custom CSS applied to the root node. **Default: undefined.**
+* tabindex: tabindex of the challenge. **Default: 0.**
+* onResolved: callback when the recaptcha is resolved. **Default: noop.**
+* onError: callback when the recaptcha encounters an error. **Default: noop.**
+* onExpired: callback when the recaptcha response expires. **Default: noop.**
 * onLoaded: callback when the recaptcha is loaded. **Default: noop.**
+* style: custom CSS applied to the root node. **Default: undefined.**
 
 ## APIs ##
 
