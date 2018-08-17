@@ -32,13 +32,15 @@ class GoogleRecaptcha extends React.Component {
     const loaded = () => {
       if ( this.container ) {
         const wrapper = document.createElement( 'div' );
+        // This wrapper must be appended to the DOM immediately before rendering
+        // reCaptcha. Otherwise multiple reCaptchas will act jointly somehow.
+        this.container.appendChild( wrapper );
         const recaptchaId = window.grecaptcha.render( wrapper, {
           sitekey,
           size: 'invisible',
           badge,
           callback: this.callbackName
         });
-        this.container.appendChild( wrapper );
         this.execute = () => window.grecaptcha.execute( recaptchaId );
         this.reset = () => window.grecaptcha.reset( recaptchaId );
         this.getResponse = () => window.grecaptcha.getResponse( recaptchaId );
