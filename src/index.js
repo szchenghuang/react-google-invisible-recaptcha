@@ -24,7 +24,16 @@ const injectScript = locale => {
 
 class GoogleRecaptcha extends React.Component {
   componentDidMount() {
-    const { sitekey, locale, badge, onResolved, onLoaded } = this.props;
+    const {
+      sitekey,
+      locale,
+      badge,
+      tabindex,
+      onResolved,
+      onError,
+      onExpired,
+      onLoaded
+    } = this.props;
 
     this.callbackName = 'GoogleRecaptchaResolved-' + uuid();
     window[ this.callbackName ] = onResolved;
@@ -39,7 +48,10 @@ class GoogleRecaptcha extends React.Component {
           sitekey,
           size: 'invisible',
           badge,
-          callback: this.callbackName
+          tabindex,
+          callback: this.callbackName,
+          'error-callback': onError,
+          'expired-callback': onExpired
         });
         this.execute = () => window.grecaptcha.execute( recaptchaId );
         this.reset = () => window.grecaptcha.reset( recaptchaId );
@@ -83,7 +95,10 @@ GoogleRecaptcha.propTypes = {
   sitekey: PropTypes.string.isRequired,
   locale: PropTypes.string,
   badge: PropTypes.oneOf( [ 'bottomright', 'bottomleft', 'inline' ] ),
-  onResolved: PropTypes.func.isRequired,
+  tabindex: PropTypes.number,
+  onResolved: PropTypes.func,
+  onError: PropTypes.func,
+  onExpired: PropTypes.func,
   onLoaded: PropTypes.func,
   style: PropTypes.object
 };
@@ -91,6 +106,10 @@ GoogleRecaptcha.propTypes = {
 GoogleRecaptcha.defaultProps = {
   locale: 'en',
   badge: 'bottomright',
+  tabindex: 0,
+  onResolved: () => {},
+  onError: () => {},
+  onExpired: () => {},
   onLoaded: () => {}
 };
 

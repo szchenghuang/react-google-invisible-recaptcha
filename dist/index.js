@@ -68,7 +68,10 @@ var GoogleRecaptcha = function (_React$Component) {
           sitekey = _props.sitekey,
           locale = _props.locale,
           badge = _props.badge,
+          tabindex = _props.tabindex,
           onResolved = _props.onResolved,
+          onError = _props.onError,
+          onExpired = _props.onExpired,
           onLoaded = _props.onLoaded;
 
 
@@ -78,13 +81,18 @@ var GoogleRecaptcha = function (_React$Component) {
       var loaded = function loaded() {
         if (_this2.container) {
           var wrapper = document.createElement('div');
+          // This wrapper must be appended to the DOM immediately before rendering
+          // reCaptcha. Otherwise multiple reCaptchas will act jointly somehow.
+          _this2.container.appendChild(wrapper);
           var recaptchaId = window.grecaptcha.render(wrapper, {
             sitekey: sitekey,
             size: 'invisible',
             badge: badge,
-            callback: _this2.callbackName
+            tabindex: tabindex,
+            callback: _this2.callbackName,
+            'error-callback': onError,
+            'expired-callback': onExpired
           });
-          _this2.container.appendChild(wrapper);
           _this2.execute = function () {
             return window.grecaptcha.execute(recaptchaId);
           };
@@ -138,7 +146,10 @@ GoogleRecaptcha.propTypes = {
   sitekey: _propTypes2.default.string.isRequired,
   locale: _propTypes2.default.string,
   badge: _propTypes2.default.oneOf(['bottomright', 'bottomleft', 'inline']),
-  onResolved: _propTypes2.default.func.isRequired,
+  tabindex: _propTypes2.default.number,
+  onResolved: _propTypes2.default.func,
+  onError: _propTypes2.default.func,
+  onExpired: _propTypes2.default.func,
   onLoaded: _propTypes2.default.func,
   style: _propTypes2.default.object
 };
@@ -146,6 +157,10 @@ GoogleRecaptcha.propTypes = {
 GoogleRecaptcha.defaultProps = {
   locale: 'en',
   badge: 'bottomright',
+  tabindex: 0,
+  onResolved: function onResolved() {},
+  onError: function onError() {},
+  onExpired: function onExpired() {},
   onLoaded: function onLoaded() {}
 };
 
