@@ -30,7 +30,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 var renderers = [];
 
-var injectScript = function injectScript(locale) {
+var injectScript = function injectScript(locale, nonce) {
   window.GoogleRecaptchaLoaded = function () {
     while (renderers.length) {
       var renderer = renderers.shift();
@@ -44,6 +44,7 @@ var injectScript = function injectScript(locale) {
   script.type = 'text/javascript';
   script.async = true;
   script.defer = true;
+  script.nonce = nonce;
   script.onerror = function (error) {
     throw error;
   };
@@ -67,6 +68,7 @@ var GoogleRecaptcha = function (_React$Component) {
       var _props = this.props,
           sitekey = _props.sitekey,
           locale = _props.locale,
+          nonce = _props.nonce,
           badge = _props.badge,
           tabindex = _props.tabindex,
           onResolved = _props.onResolved,
@@ -87,6 +89,7 @@ var GoogleRecaptcha = function (_React$Component) {
           var recaptchaId = window.grecaptcha.render(wrapper, {
             sitekey: sitekey,
             size: 'invisible',
+            nonce: nonce,
             badge: badge,
             tabindex: tabindex,
             callback: _this2.callbackName,
@@ -111,7 +114,7 @@ var GoogleRecaptcha = function (_React$Component) {
       } else {
         renderers.push(loaded);
         if (!document.querySelector('#recaptcha')) {
-          injectScript(locale);
+          injectScript(locale, nonce);
         }
       }
     }
@@ -145,6 +148,7 @@ var GoogleRecaptcha = function (_React$Component) {
 GoogleRecaptcha.propTypes = {
   sitekey: _propTypes2.default.string.isRequired,
   locale: _propTypes2.default.string,
+  nonce: _propTypes2.default.string,
   badge: _propTypes2.default.oneOf(['bottomright', 'bottomleft', 'inline']),
   tabindex: _propTypes2.default.number,
   onResolved: _propTypes2.default.func,
