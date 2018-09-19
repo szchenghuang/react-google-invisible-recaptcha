@@ -4,7 +4,7 @@ import uuid from 'uuid/v4';
 
 const renderers = [];
 
-const injectScript = locale => {
+const injectScript = (locale, nonce) => {
   window.GoogleRecaptchaLoaded = () => {
     while ( renderers.length ) {
       const renderer = renderers.shift();
@@ -18,6 +18,7 @@ const injectScript = locale => {
   script.type = 'text/javascript';
   script.async = true;
   script.defer = true;
+  script.nonce = nonce;
   script.onerror = function( error ) { throw error; };
   document.body.appendChild( script );
 };
@@ -27,6 +28,7 @@ class GoogleRecaptcha extends React.Component {
     const {
       sitekey,
       locale,
+      nonce,
       badge,
       tabindex,
       onResolved,
@@ -70,7 +72,7 @@ class GoogleRecaptcha extends React.Component {
     } else {
       renderers.push( loaded );
       if ( !document.querySelector( '#recaptcha' ) ) {
-        injectScript( locale );
+        injectScript( locale, nonce );
       }
     }
   }
@@ -94,6 +96,7 @@ class GoogleRecaptcha extends React.Component {
 GoogleRecaptcha.propTypes = {
   sitekey: PropTypes.string.isRequired,
   locale: PropTypes.string,
+  nonce: PropTypes.string,
   badge: PropTypes.oneOf( [ 'bottomright', 'bottomleft', 'inline' ] ),
   tabindex: PropTypes.number,
   onResolved: PropTypes.func,
@@ -105,6 +108,7 @@ GoogleRecaptcha.propTypes = {
 
 GoogleRecaptcha.defaultProps = {
   locale: 'en',
+  nonce: new Buffer(uuid()).toString('base64'),
   badge: 'bottomright',
   tabindex: 0,
   onResolved: () => {},
