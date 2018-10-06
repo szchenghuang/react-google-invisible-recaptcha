@@ -78,7 +78,10 @@ class GoogleRecaptcha extends React.Component {
     while ( this.container.firstChild ) {
       this.container.removeChild( this.container.firstChild );
     }
-    this.reset();
+    // there is a chance that the reCAPTCHA api lib is not loaded yet, so check before invoking reset
+    if ( this.reset ) {
+      this.reset();
+    }
     delete window[ this.callbackName ];
   }
   render() {
