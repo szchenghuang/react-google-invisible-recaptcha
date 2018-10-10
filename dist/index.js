@@ -121,7 +121,11 @@ var GoogleRecaptcha = function (_React$Component) {
       while (this.container.firstChild) {
         this.container.removeChild(this.container.firstChild);
       }
-      this.reset();
+      // There is a chance that the reCAPTCHA API lib is not loaded yet, so check
+      // before invoking reset.
+      if (this.reset) {
+        this.reset();
+      }
       delete window[this.callbackName];
     }
   }, {
