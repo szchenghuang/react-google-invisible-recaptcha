@@ -14,7 +14,7 @@ const injectScript = locale => {
 
   const script = document.createElement( 'script' );
   script.id = 'recaptcha';
-  script.src = `https://www.google.com/recaptcha/api.js?hl=${locale}&onload=GoogleRecaptchaLoaded&render=explicit`;
+  script.src = `https://www.google.com/recaptcha/api.js?${ locale && 'hl=' + locale }&onload=GoogleRecaptchaLoaded&render=explicit`;
   script.type = 'text/javascript';
   script.async = true;
   script.defer = true;
@@ -108,7 +108,7 @@ GoogleRecaptcha.propTypes = {
 };
 
 GoogleRecaptcha.defaultProps = {
-  locale: 'en',
+  locale: '',
   badge: 'bottomright',
   tabindex: 0,
   onResolved: () => {},
