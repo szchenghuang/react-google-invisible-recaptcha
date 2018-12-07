@@ -3,7 +3,7 @@
 A React component which is simply interested in Google invisible reCAPTCHA.
 
 * Support multiple reCAPTCHA widgets on one page.
-* Vallina JS.
+* Vanilla JS.
 
 ## [Demo][demo] ##
 
