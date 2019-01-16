@@ -4,7 +4,7 @@ import uuid from 'uuid/v4';
 
 const renderers = [];
 
-const injectScript = locale => {
+const injectScript = ( locale, nonce ) => {
   window.GoogleRecaptchaLoaded = () => {
     while ( renderers.length ) {
       const renderer = renderers.shift();
@@ -13,26 +13,28 @@ const injectScript = locale => {
   };
 
   const script = document.createElement( 'script' );
-  script.id = 'recaptcha';
-  script.src = `https://www.google.com/recaptcha/api.js?${ locale && 'hl=' + locale }&onload=GoogleRecaptchaLoaded&render=explicit`;
-  script.type = 'text/javascript';
   script.async = true;
   script.defer = true;
+  script.id = 'recaptcha';
   script.onerror = function( error ) { throw error; };
+  script.src = `https://www.google.com/recaptcha/api.js?${ locale && 'hl=' + locale }&onload=GoogleRecaptchaLoaded&render=explicit`;
+  script.type = 'text/javascript';
+  nonce && script.setAttribute("nonce", nonce);
   document.body.appendChild( script );
 };
 
 class GoogleRecaptcha extends React.Component {
   componentDidMount() {
     const {
-      sitekey,
-      locale,
       badge,
-      tabindex,
-      onResolved,
-      onError,
+      locale,
+      nonce,
       onExpired,
-      onLoaded
+      onError,
+      onLoaded,
+      onResolved,
+      sitekey,
+      tabindex,
     } = this.props;
 
     this.callbackName = 'GoogleRecaptchaResolved-' + uuid();
@@ -45,13 +47,13 @@ class GoogleRecaptcha extends React.Component {
         // reCaptcha. Otherwise multiple reCaptchas will act jointly somehow.
         this.container.appendChild( wrapper );
         const recaptchaId = window.grecaptcha.render( wrapper, {
-          sitekey,
-          size: 'invisible',
           badge,
-          tabindex,
           callback: this.callbackName,
           'error-callback': onError,
-          'expired-callback': onExpired
+          'expired-callback': onExpired,
+          sitekey,
+          size: 'invisible',
+          tabindex,
         });
         this.execute = () => window.grecaptcha.execute( recaptchaId );
         this.reset = () => window.grecaptcha.reset( recaptchaId );
@@ -70,7 +72,7 @@ class GoogleRecaptcha extends React.Component {
     } else {
       renderers.push( loaded );
       if ( !document.querySelector( '#recaptcha' ) ) {
-        injectScript( locale );
+        injectScript( locale, nonce );
       }
     }
   }
@@ -96,25 +98,26 @@ class GoogleRecaptcha extends React.Component {
 }
 
 GoogleRecaptcha.propTypes = {
-  sitekey: PropTypes.string.isRequired,
-  locale: PropTypes.string,
   badge: PropTypes.oneOf( [ 'bottomright', 'bottomleft', 'inline' ] ),
-  tabindex: PropTypes.number,
-  onResolved: PropTypes.func,
-  onError: PropTypes.func,
+  locale: PropTypes.string,
+  nonce: PropTypes.string,
   onExpired: PropTypes.func,
+  onError: PropTypes.func,
+  onResolved: PropTypes.func,
   onLoaded: PropTypes.func,
-  style: PropTypes.object
+  sitekey: PropTypes.string.isRequired,
+  style: PropTypes.object,
+  tabindex: PropTypes.number,
 };
 
 GoogleRecaptcha.defaultProps = {
-  locale: '',
   badge: 'bottomright',
-  tabindex: 0,
-  onResolved: () => {},
-  onError: () => {},
+  locale: '',
   onExpired: () => {},
-  onLoaded: () => {}
+  onError: () => {},
+  onLoaded: () => {},
+  onResolved: () => {},
+  tabindex: 0,
 };
 
 export default GoogleRecaptcha;
