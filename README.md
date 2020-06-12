@@ -86,6 +86,7 @@ A few optional props you can tweak.
 * onLoaded: callback when the recaptcha is loaded. **Default: noop.**
 * style: custom CSS applied to the root node. **Default: undefined.**
 * tabindex: tabindex of the challenge. **Default: 0.**
+* trustedTypesPolicy: the Trusted Types policy to use for the script url. **Default: null.**
 
 ## APIs ##
 

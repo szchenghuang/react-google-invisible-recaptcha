@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import uuid from 'uuid/v4';
+import { v4 as uuid } from 'uuid';
 
 const renderers = [];
 
-const injectScript = ( locale, nonce ) => {
+const injectScript = ( locale, nonce, trustedTypesPolicy ) => {
   window.GoogleRecaptchaLoaded = () => {
     while ( renderers.length ) {
       const renderer = renderers.shift();
@@ -12,12 +12,18 @@ const injectScript = ( locale, nonce ) => {
     }
   };
 
+  let recaptchaSource = `https://www.google.com/recaptcha/api.js?${ locale && 'hl=' + locale }&onload=GoogleRecaptchaLoaded&render=explicit`;
+
+  if ( typeof window.trustedTypes !== 'undefined' && trustedTypesPolicy ) {
+    recaptchaSource = trustedTypesPolicy.createScriptURL( recaptchaSource );
+  }
+
   const script = document.createElement( 'script' );
   script.async = true;
   script.defer = true;
   script.id = 'recaptcha';
   script.onerror = function( error ) { throw error; };
-  script.src = `https://www.google.com/recaptcha/api.js?${ locale && 'hl=' + locale }&onload=GoogleRecaptchaLoaded&render=explicit`;
+  script.src = recaptchaSource;
   script.type = 'text/javascript';
   nonce && script.setAttribute("nonce", nonce);
   document.body.appendChild( script );
@@ -35,6 +41,7 @@ class GoogleRecaptcha extends React.Component {
       onResolved,
       sitekey,
       tabindex,
+      trustedTypesPolicy,
     } = this.props;
 
     this.callbackName = 'GoogleRecaptchaResolved-' + uuid();
@@ -72,7 +79,7 @@ class GoogleRecaptcha extends React.Component {
     } else {
       renderers.push( loaded );
       if ( !document.querySelector( '#recaptcha' ) ) {
-        injectScript( locale, nonce );
+        injectScript( locale, nonce, trustedTypesPolicy );
       }
     }
   }
@@ -108,6 +115,7 @@ GoogleRecaptcha.propTypes = {
   sitekey: PropTypes.string.isRequired,
   style: PropTypes.object,
   tabindex: PropTypes.number,
+  trustedTypesPolicy: PropTypes.object,
 };
 
 GoogleRecaptcha.defaultProps = {
@@ -118,6 +126,7 @@ GoogleRecaptcha.defaultProps = {
   onLoaded: () => {},
   onResolved: () => {},
   tabindex: 0,
+  trustedTypesPolicy: null,
 };
 
 export default GoogleRecaptcha;

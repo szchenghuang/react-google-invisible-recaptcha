@@ -1,5 +1,4 @@
 var Path = require('path');
-var Webpack = require('webpack');
 var HTMLWebpackPlugin = require('html-webpack-plugin');
 
 const PATHS = {
