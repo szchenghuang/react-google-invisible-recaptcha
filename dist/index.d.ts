@@ -5,10 +5,10 @@ interface GoogleRecaptchaProps {
     badge?: 'bottomright' | 'bottomleft' | 'inline';
     locale?: string;
     nonce?: string;
-    onExpired?: () => void;
-    onError?: () => void;
-    onResolved?: (recaptchaToken: string) => void;
-    onLoaded?: () => void;
+    onExpired?: () => void | Promise<void>;
+    onError?: () => void | Promise<void>;
+    onResolved?: (recaptchaToken: string) => void | Promise<void>;
+    onLoaded?: () => void | Promise<void>;
     sitekey: string;
     style?: {
         [key: string]: string | number;
