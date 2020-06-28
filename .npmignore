@@ -4,4 +4,4 @@
 npmignore
 docs
 example
-src
+*.tsbuildinfo

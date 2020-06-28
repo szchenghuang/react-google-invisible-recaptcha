@@ -1,19 +1,21 @@
-# react-google-invisible-recaptcha #
+# React Invisible Recaptcha
 
-A React component which is simply interested in Google invisible reCAPTCHA.
+A simple React component to create Google invisible recaptchas
 
-* Support multiple reCAPTCHA widgets on one page.
-* Vanilla JS.
+## Install
 
-## [Demo][demo] ##
+```sh
+npm install react-invisible-recaptcha --save
+```
 
-Type something in an input box and click the button to submit data. The value is then checked to make up example client-side validation. Only valid input triggers reCAPTCHA. Since the reCAPTCHA is invisible, it proceeds most likely as if none is attached. You will only be present the figure of the reCAPTCHA when Google hesitates to tell your identity.
+Or use Yarn:
+```sh
+yarn add react-invisible-recaptcha
+```
 
-When reCAPTCHA is resolved, the demo page shows the result token for demo purpose. In a real application, it should be used with a HTTP request targeting at `https://www.google.com/recaptcha/api/siteverify?secret=<secret>&response=<token>` on the server to validate the reCAPTCHA result before any sensitive operation is performed. Checking input values derived from clients on the server imporves security as well.
+## Example
 
-## Example ##
-
-Below is a component which coordinates the procedure.
+Below is a component which implements the recaptcha.
 
 ```js
 class Example extends React.Component {
@@ -52,13 +54,7 @@ class Example extends React.Component {
 }
 ```
 
-## Install ##
-
-```sh
-npm install react-google-invisible-recaptcha --save
-```
-
-## Usage ##
+## Usage
 
 ```js
 import Recaptcha from 'react-google-invisible-recaptcha';
@@ -69,7 +65,7 @@ import Recaptcha from 'react-google-invisible-recaptcha';
   onResolved={ () => console.log( 'Human detected.' ) } />
 ```
 
-## Configuration ##
+## Configuration
 
 Set required props to get going.
 
@@ -88,7 +84,7 @@ A few optional props you can tweak.
 * tabindex: tabindex of the challenge. **Default: 0.**
 * trustedTypesPolicy: the Trusted Types policy to use for the script url. **Default: null.**
 
-## APIs ##
+## APIs
 
 ```js
 <Recaptcha ref={ ref => this.recaptcha = ref } ... />
@@ -98,8 +94,6 @@ A few optional props you can tweak.
 * _this.recaptcha.reset_ function which resets the reCAPTCHA widget.
 * _this.recaptcha.getResponse_ function which returns the response token.
 
-## License ##
+## License
 
-MIT. See [LICENSE.md](http://github.com/szchenghuang/react-google-invisible-recaptcha/blob/master/LICENSE.md) for details.
-
-[demo]: https://szchenghuang.github.io/react-google-invisible-recaptcha/
+MIT. See [LICENSE.md](http://github.com/teamtofu/react-google-invisible-recaptcha/blob/master/LICENSE.md) for details.
