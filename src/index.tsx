@@ -4,8 +4,7 @@ import { v4 as uuid } from 'uuid';
 
 type RecaptchaWindow = (typeof window) & {
   GoogleRecaptchaLoaded: () => void;
-} & {
-  [GoogleRecaptchaResolved: string]: ((recaptchaToken: string) => void) | undefined,
+  [GoogleRecaptchaResolved: string]: ((recaptchaToken: string) => void) | undefined;
 };
 
 const renderers: (() => void)[] = [];
@@ -41,10 +40,10 @@ interface GoogleRecaptchaProps {
   badge?: 'bottomright' | 'bottomleft' | 'inline',
   locale?: string,
   nonce?: string,
-  onExpired?: () => void,
-  onError?: () => void,
-  onResolved?: (recaptchaToken: string) => void,
-  onLoaded?: () => void,
+  onExpired?: () => void | Promise<void>,
+  onError?: () => void | Promise<void>,
+  onResolved?: (recaptchaToken: string) => void | Promise<void>,
+  onLoaded?: () => void | Promise<void>,
   sitekey: string,
   style?: { [key: string]: string | number },
   tabindex?: number,
@@ -108,7 +107,7 @@ class GoogleRecaptcha extends Component<GoogleRecaptchaProps, {}> {
         this.container.appendChild(wrapper);
         const recaptchaId = window.grecaptcha.render(wrapper, {
           badge,
-          'callback': this.callbackName as unknown as ((response: string) => void),
+          'callback': onResolved,
           'error-callback': onError,
           'expired-callback': onExpired,
           sitekey,
@@ -147,7 +146,7 @@ class GoogleRecaptcha extends Component<GoogleRecaptchaProps, {}> {
       this.reset();
     }
 
-    delete (window as RecaptchaWindow)[this.callbackName];
+    // delete (window as RecaptchaWindow)[this.callbackName];
   }
 
   render() {
