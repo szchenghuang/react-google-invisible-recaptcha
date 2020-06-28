@@ -22,7 +22,8 @@
   "scripts": {
     "lint": "eslint src",
     "prebuild": "rimraf dist && mkdir dist ",
-    "build": "tsc --project tsconfig.json"
+    "build": "tsc --project tsconfig.json",
+    "publish:github": "npm publish --registry=https://npm.pkg.github.com/"
   },
   "dependencies": {
     "@types/grecaptcha": "^3.0.1",

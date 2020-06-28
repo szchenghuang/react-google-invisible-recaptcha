@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { v4 as uuid } from 'uuid';
 
@@ -10,31 +10,31 @@ type RecaptchaWindow = (typeof window) & {
 
 const renderers: (() => void)[] = [];
 
-const injectScript = ( locale?: string, nonce?: string, trustedTypesPolicy?: TrustedTypePolicy ) => {
+const injectScript = (locale?: string, nonce?: string, trustedTypesPolicy?: TrustedTypePolicy) => {
   (window as RecaptchaWindow).GoogleRecaptchaLoaded = () => {
-    while ( renderers.length ) {
+    while (renderers.length) {
       const renderer = renderers.shift();
       if (renderer) renderer();
     }
   };
 
-  let recaptchaSource: string | TrustedScriptURL = `https://www.google.com/recaptcha/api.js?${ locale && 'hl=' + locale }&onload=GoogleRecaptchaLoaded&render=explicit`;
+  let recaptchaSource: string | TrustedScriptURL = `https://www.google.com/recaptcha/api.js?${locale && 'hl=' + locale}&onload=GoogleRecaptchaLoaded&render=explicit`;
 
-  if ( typeof window.trustedTypes !== 'undefined' && trustedTypesPolicy ) {
-    recaptchaSource = trustedTypesPolicy.createScriptURL( recaptchaSource );
+  if (typeof window.trustedTypes !== 'undefined' && trustedTypesPolicy) {
+    recaptchaSource = trustedTypesPolicy.createScriptURL(recaptchaSource);
   }
 
-  const script = document.createElement( 'script' );
+  const script = document.createElement('script');
   script.async = true;
   script.defer = true;
   script.id = 'recaptcha';
-  script.onerror = function( error ) {
+  script.onerror = function (error) {
     throw error;
   };
   script.src = recaptchaSource as string;
   script.type = 'text/javascript';
   nonce && script.setAttribute('nonce', nonce);
-  document.body.appendChild( script );
+  document.body.appendChild(script);
 };
 
 interface GoogleRecaptchaProps {
@@ -46,14 +46,14 @@ interface GoogleRecaptchaProps {
   onResolved?: (recaptchaToken: string) => void,
   onLoaded?: () => void,
   sitekey: string,
-  style?: {[key: string]: string | number},
+  style?: { [key: string]: string | number },
   tabindex?: number,
   trustedTypesPolicy?: TrustedTypePolicy,
 }
 
 class GoogleRecaptcha extends Component<GoogleRecaptchaProps, {}> {
   static propTypes = {
-    badge: PropTypes.oneOf( ['bottomright', 'bottomleft', 'inline'] ),
+    badge: PropTypes.oneOf(['bottomright', 'bottomleft', 'inline']),
     locale: PropTypes.string,
     nonce: PropTypes.string,
     onExpired: PropTypes.func,
@@ -69,18 +69,18 @@ class GoogleRecaptcha extends Component<GoogleRecaptchaProps, {}> {
   static defaultProps = {
     badge: 'bottomright',
     locale: '',
-    onExpired: () => {},
-    onError: () => {},
-    onLoaded: () => {},
-    onResolved: () => {},
+    onExpired: () => { },
+    onError: () => { },
+    onLoaded: () => { },
+    onResolved: () => { },
     tabindex: 0,
     trustedTypesPolicy: null,
   }
 
   container: HTMLElement | null = null;
   callbackName: string = 'GoogleRecaptchaResolved';
-  execute: () => void = () => {};
-  reset: () => void = () => {};
+  execute: () => void = () => { };
+  reset: () => void = () => { };
   getResponse: () => string = () => '';
 
   componentDidMount() {
@@ -98,32 +98,32 @@ class GoogleRecaptcha extends Component<GoogleRecaptchaProps, {}> {
     } = this.props;
 
     this.callbackName = 'GoogleRecaptchaResolved-' + uuid();
-    (window as RecaptchaWindow)[ this.callbackName ] = onResolved;
+    (window as RecaptchaWindow)[this.callbackName] = onResolved;
 
     const loaded = () => {
-      if ( this.container ) {
-        const wrapper = document.createElement( 'div' );
+      if (this.container) {
+        const wrapper = document.createElement('div');
         // This wrapper must be appended to the DOM immediately before rendering
         // reCaptcha. Otherwise multiple reCaptchas will act jointly somehow.
-        this.container.appendChild( wrapper );
-        const recaptchaId = window.grecaptcha.render( wrapper, {
+        this.container.appendChild(wrapper);
+        const recaptchaId = window.grecaptcha.render(wrapper, {
           badge,
-          'callback': (window as RecaptchaWindow)[this.callbackName],
+          'callback': this.callbackName as unknown as ((response: string) => void),
           'error-callback': onError,
           'expired-callback': onExpired,
           sitekey,
           'size': 'invisible',
           tabindex,
         });
-        this.execute = () => window.grecaptcha.execute( recaptchaId );
-        this.reset = () => window.grecaptcha.reset( recaptchaId );
-        this.getResponse = () => window.grecaptcha.getResponse( recaptchaId );
+        this.execute = () => window.grecaptcha.execute(recaptchaId);
+        this.reset = () => window.grecaptcha.reset(recaptchaId);
+        this.getResponse = () => window.grecaptcha.getResponse(recaptchaId);
 
         if (onLoaded) onLoaded();
       }
     };
 
-    if ( window.grecaptcha &&
+    if (window.grecaptcha &&
       window.grecaptcha.render &&
       window.grecaptcha.execute &&
       window.grecaptcha.reset &&
@@ -131,27 +131,31 @@ class GoogleRecaptcha extends Component<GoogleRecaptchaProps, {}> {
     ) {
       loaded();
     } else {
-      renderers.push( loaded );
-      if ( !document.getElementById('recaptcha') ) {
-        injectScript( locale, nonce, trustedTypesPolicy );
+      renderers.push(loaded);
+      if (!document.getElementById('recaptcha')) {
+        injectScript(locale, nonce, trustedTypesPolicy);
       }
     }
   }
 
   componentWillUnmount() {
-    while ( this.container?.firstChild ) {
-      this.container.removeChild( this.container.firstChild );
+    while (this.container?.firstChild) {
+      this.container.removeChild(this.container.firstChild);
     }
 
-    delete (window as RecaptchaWindow)[ this.callbackName ];
+    if (this.reset) {
+      this.reset();
+    }
+
+    delete (window as RecaptchaWindow)[this.callbackName];
   }
 
   render() {
     const { style } = this.props;
     return (
       <div
-        ref={ (ref) => this.container = ref }
-        { ...( style && { style } ) } />
+        ref={(ref) => this.container = ref}
+        {...(style && { style })} />
     );
   }
 }
