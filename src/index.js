@@ -22,10 +22,12 @@ const injectScript = ( locale, nonce, trustedTypesPolicy ) => {
   script.async = true;
   script.defer = true;
   script.id = 'recaptcha';
-  script.onerror = function( error ) { throw error; };
+  script.onerror = function( error ) {
+    throw error;
+  };
   script.src = recaptchaSource;
   script.type = 'text/javascript';
-  nonce && script.setAttribute("nonce", nonce);
+  nonce && script.setAttribute('nonce', nonce);
   document.body.appendChild( script );
 };
 
@@ -55,11 +57,11 @@ class GoogleRecaptcha extends React.Component {
         this.container.appendChild( wrapper );
         const recaptchaId = window.grecaptcha.render( wrapper, {
           badge,
-          callback: this.callbackName,
+          'callback': this.callbackName,
           'error-callback': onError,
           'expired-callback': onExpired,
           sitekey,
-          size: 'invisible',
+          'size': 'invisible',
           tabindex,
         });
         this.execute = () => window.grecaptcha.execute( recaptchaId );
@@ -87,25 +89,21 @@ class GoogleRecaptcha extends React.Component {
     while ( this.container.firstChild ) {
       this.container.removeChild( this.container.firstChild );
     }
-    // There is a chance that the reCAPTCHA API lib is not loaded yet, so check
-    // before invoking reset.
-    if ( this.reset ) {
-      this.reset();
-    }
+
     delete window[ this.callbackName ];
   }
   render() {
     const { style } = this.props;
     return (
       <div
-        ref={ ref => this.container = ref }
+        ref={ (ref) => this.container = ref }
         { ...( style && { style } ) } />
     );
   }
 }
 
 GoogleRecaptcha.propTypes = {
-  badge: PropTypes.oneOf( [ 'bottomright', 'bottomleft', 'inline' ] ),
+  badge: PropTypes.oneOf( ['bottomright', 'bottomleft', 'inline'] ),
   locale: PropTypes.string,
   nonce: PropTypes.string,
   onExpired: PropTypes.func,

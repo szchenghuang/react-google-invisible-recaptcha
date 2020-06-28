@@ -51,7 +51,7 @@ var injectScript = function injectScript(locale, nonce, trustedTypesPolicy) {
   };
   script.src = recaptchaSource;
   script.type = 'text/javascript';
-  nonce && script.setAttribute("nonce", nonce);
+  nonce && script.setAttribute('nonce', nonce);
   document.body.appendChild(script);
 };
 
@@ -93,11 +93,11 @@ var GoogleRecaptcha = function (_React$Component) {
           _this2.container.appendChild(wrapper);
           var recaptchaId = window.grecaptcha.render(wrapper, {
             badge: badge,
-            callback: _this2.callbackName,
+            'callback': _this2.callbackName,
             'error-callback': onError,
             'expired-callback': onExpired,
             sitekey: sitekey,
-            size: 'invisible',
+            'size': 'invisible',
             tabindex: tabindex
           });
           _this2.execute = function () {
@@ -128,11 +128,7 @@ var GoogleRecaptcha = function (_React$Component) {
       while (this.container.firstChild) {
         this.container.removeChild(this.container.firstChild);
       }
-      // There is a chance that the reCAPTCHA API lib is not loaded yet, so check
-      // before invoking reset.
-      if (this.reset) {
-        this.reset();
-      }
+
       delete window[this.callbackName];
     }
   }, {
