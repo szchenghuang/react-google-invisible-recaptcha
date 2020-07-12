@@ -89,7 +89,16 @@ var GoogleRecaptcha = /** @class */ (function (_super) {
         var _this = this;
         var _a = this.props, badge = _a.badge, locale = _a.locale, nonce = _a.nonce, onExpired = _a.onExpired, onError = _a.onError, onLoaded = _a.onLoaded, onResolved = _a.onResolved, sitekey = _a.sitekey, tabindex = _a.tabindex, trustedTypesPolicy = _a.trustedTypesPolicy;
         this.callbackName = 'GoogleRecaptchaResolved-' + uuid_1.v4();
-        window[this.callbackName] = onResolved;
+        window[this.callbackName] = function () {
+            var args = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                args[_i] = arguments[_i];
+            }
+            return new Promise(function () {
+                if (onResolved)
+                    onResolved.apply(void 0, args);
+            });
+        };
         var loaded = function () {
             if (_this.container) {
                 var wrapper = document.createElement('div');
@@ -98,11 +107,11 @@ var GoogleRecaptcha = /** @class */ (function (_super) {
                 _this.container.appendChild(wrapper);
                 var recaptchaId_1 = window.grecaptcha.render(wrapper, {
                     badge: badge,
-                    'callback': onResolved,
+                    callback: onResolved,
                     'error-callback': onError,
                     'expired-callback': onExpired,
                     sitekey: sitekey,
-                    'size': 'invisible',
+                    size: 'invisible',
                     tabindex: tabindex,
                 });
                 _this.execute = function () { return window.grecaptcha.execute(recaptchaId_1); };
@@ -139,7 +148,7 @@ var GoogleRecaptcha = /** @class */ (function (_super) {
     GoogleRecaptcha.prototype.render = function () {
         var _this = this;
         var style = this.props.style;
-        return (react_1.default.createElement("div", __assign({ ref: function (ref) { return _this.container = ref; } }, (style && { style: style }))));
+        return (react_1.default.createElement("div", __assign({ ref: function (ref) { return (_this.container = ref); } }, (style && { style: style }))));
     };
     GoogleRecaptcha.propTypes = {
         badge: prop_types_1.default.oneOf(['bottomright', 'bottomleft', 'inline']),

@@ -16,7 +16,7 @@ interface GoogleRecaptchaProps {
     tabindex?: number;
     trustedTypesPolicy?: TrustedTypePolicy;
 }
-declare class GoogleRecaptcha extends Component<GoogleRecaptchaProps, {}> {
+declare class GoogleRecaptcha extends Component<GoogleRecaptchaProps> {
     static propTypes: {
         badge: PropTypes.Requireable<string>;
         locale: PropTypes.Requireable<string>;

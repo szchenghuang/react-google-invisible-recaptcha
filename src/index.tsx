@@ -1,15 +1,21 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { v4 as uuid } from 'uuid';
+import {v4 as uuid} from 'uuid';
 
-type RecaptchaWindow = (typeof window) & {
+type RecaptchaWindow = typeof window & {
   GoogleRecaptchaLoaded: () => void;
-  [GoogleRecaptchaResolved: string]: ((recaptchaToken: string) => void) | undefined;
+  [GoogleRecaptchaResolved: string]:
+    | ((recaptchaToken: string) => void)
+    | undefined;
 };
 
 const renderers: (() => void)[] = [];
 
-const injectScript = (locale?: string, nonce?: string, trustedTypesPolicy?: TrustedTypePolicy) => {
+const injectScript = (
+  locale?: string,
+  nonce?: string,
+  trustedTypesPolicy?: TrustedTypePolicy
+) => {
   (window as RecaptchaWindow).GoogleRecaptchaLoaded = () => {
     while (renderers.length) {
       const renderer = renderers.shift();
@@ -17,7 +23,11 @@ const injectScript = (locale?: string, nonce?: string, trustedTypesPolicy?: Trus
     }
   };
 
-  let recaptchaSource: string | TrustedScriptURL = `https://www.google.com/recaptcha/api.js?${locale && 'hl=' + locale}&onload=GoogleRecaptchaLoaded&render=explicit`;
+  let recaptchaSource:
+    | string
+    | TrustedScriptURL = `https://www.google.com/recaptcha/api.js?${
+    locale && 'hl=' + locale
+  }&onload=GoogleRecaptchaLoaded&render=explicit`;
 
   if (typeof window.trustedTypes !== 'undefined' && trustedTypesPolicy) {
     recaptchaSource = trustedTypesPolicy.createScriptURL(recaptchaSource);
@@ -37,20 +47,20 @@ const injectScript = (locale?: string, nonce?: string, trustedTypesPolicy?: Trus
 };
 
 interface GoogleRecaptchaProps {
-  badge?: 'bottomright' | 'bottomleft' | 'inline',
-  locale?: string,
-  nonce?: string,
-  onExpired?: () => void | Promise<void>,
-  onError?: () => void | Promise<void>,
-  onResolved?: (recaptchaToken: string) => void | Promise<void>,
-  onLoaded?: () => void | Promise<void>,
-  sitekey: string,
-  style?: { [key: string]: string | number },
-  tabindex?: number,
-  trustedTypesPolicy?: TrustedTypePolicy,
+  badge?: 'bottomright' | 'bottomleft' | 'inline';
+  locale?: string;
+  nonce?: string;
+  onExpired?: () => void | Promise<void>;
+  onError?: () => void | Promise<void>;
+  onResolved?: (recaptchaToken: string) => void | Promise<void>;
+  onLoaded?: () => void | Promise<void>;
+  sitekey: string;
+  style?: {[key: string]: string | number};
+  tabindex?: number;
+  trustedTypesPolicy?: TrustedTypePolicy;
 }
 
-class GoogleRecaptcha extends Component<GoogleRecaptchaProps, {}> {
+class GoogleRecaptcha extends Component<GoogleRecaptchaProps> {
   static propTypes = {
     badge: PropTypes.oneOf(['bottomright', 'bottomleft', 'inline']),
     locale: PropTypes.string,
@@ -63,23 +73,23 @@ class GoogleRecaptcha extends Component<GoogleRecaptchaProps, {}> {
     style: PropTypes.object,
     tabindex: PropTypes.number,
     trustedTypesPolicy: PropTypes.object,
-  }
+  };
 
   static defaultProps = {
     badge: 'bottomright',
     locale: '',
-    onExpired: () => { },
-    onError: () => { },
-    onLoaded: () => { },
-    onResolved: () => { },
+    onExpired: () => {},
+    onError: () => {},
+    onLoaded: () => {},
+    onResolved: () => {},
     tabindex: 0,
     trustedTypesPolicy: null,
-  }
+  };
 
   container: HTMLElement | null = null;
-  callbackName: string = 'GoogleRecaptchaResolved';
-  execute: () => void = () => { };
-  reset: () => void = () => { };
+  callbackName = 'GoogleRecaptchaResolved';
+  execute: () => void = () => {};
+  reset: () => void = () => {};
   getResponse: () => string = () => '';
 
   componentDidMount() {
@@ -97,7 +107,11 @@ class GoogleRecaptcha extends Component<GoogleRecaptchaProps, {}> {
     } = this.props;
 
     this.callbackName = 'GoogleRecaptchaResolved-' + uuid();
-    (window as RecaptchaWindow)[this.callbackName] = onResolved;
+    (window as RecaptchaWindow)[this.callbackName] = function (...args) {
+      return new Promise(() => {
+        if (onResolved) onResolved(...args);
+      });
+    };
 
     const loaded = () => {
       if (this.container) {
@@ -107,11 +121,11 @@ class GoogleRecaptcha extends Component<GoogleRecaptchaProps, {}> {
         this.container.appendChild(wrapper);
         const recaptchaId = window.grecaptcha.render(wrapper, {
           badge,
-          'callback': onResolved,
+          callback: onResolved,
           'error-callback': onError,
           'expired-callback': onExpired,
           sitekey,
-          'size': 'invisible',
+          size: 'invisible',
           tabindex,
         });
         this.execute = () => window.grecaptcha.execute(recaptchaId);
@@ -122,7 +136,8 @@ class GoogleRecaptcha extends Component<GoogleRecaptchaProps, {}> {
       }
     };
 
-    if (window.grecaptcha &&
+    if (
+      window.grecaptcha &&
       window.grecaptcha.render &&
       window.grecaptcha.execute &&
       window.grecaptcha.reset &&
@@ -150,11 +165,9 @@ class GoogleRecaptcha extends Component<GoogleRecaptchaProps, {}> {
   }
 
   render() {
-    const { style } = this.props;
+    const {style} = this.props;
     return (
-      <div
-        ref={(ref) => this.container = ref}
-        {...(style && { style })} />
+      <div ref={(ref) => (this.container = ref)} {...(style && {style})} />
     );
   }
 }

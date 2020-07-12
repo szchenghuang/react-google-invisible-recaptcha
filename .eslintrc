@@ -14,7 +14,8 @@
     "extends": [
         "eslint:recommended",
         "google",
-        "plugin:@typescript-eslint/recommended"
+        "plugin:@typescript-eslint/recommended",
+        "plugin:react/recommended"
     ],
     "plugins": [
         "react",
@@ -23,7 +24,18 @@
         "@typescript-eslint"
     ],
     "rules": {
-        "semi": [1, "always"],
-        "require-jsdoc": 0
+        "semi": [
+            1,
+            "always"
+        ],
+        "require-jsdoc": 0,
+        "quote-props": [
+            "error",
+            "as-needed"
+        ],
+        "indent": "off",
+        "space-before-function-paren": "off",
+        "@typescript-eslint/explicit-module-boundary-types": "off",
+        "@typescript-eslint/no-empty-function": "off"
     }
 }
