@@ -121,7 +121,7 @@ class GoogleRecaptcha extends Component<GoogleRecaptchaProps> {
         this.container.appendChild(wrapper);
         const recaptchaId = window.grecaptcha.render(wrapper, {
           badge,
-          callback: onResolved,
+          callback: (window as RecaptchaWindow)[this.callbackName],
           'error-callback': onError,
           'expired-callback': onExpired,
           sitekey,
@@ -161,7 +161,7 @@ class GoogleRecaptcha extends Component<GoogleRecaptchaProps> {
       this.reset();
     }
 
-    // delete (window as RecaptchaWindow)[this.callbackName];
+    delete (window as RecaptchaWindow)[this.callbackName];
   }
 
   render() {

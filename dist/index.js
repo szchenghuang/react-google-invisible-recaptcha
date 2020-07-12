@@ -107,7 +107,7 @@ var GoogleRecaptcha = /** @class */ (function (_super) {
                 _this.container.appendChild(wrapper);
                 var recaptchaId_1 = window.grecaptcha.render(wrapper, {
                     badge: badge,
-                    callback: onResolved,
+                    callback: window[_this.callbackName],
                     'error-callback': onError,
                     'expired-callback': onExpired,
                     sitekey: sitekey,
@@ -143,7 +143,7 @@ var GoogleRecaptcha = /** @class */ (function (_super) {
         if (this.reset) {
             this.reset();
         }
-        // delete (window as RecaptchaWindow)[this.callbackName];
+        delete window[this.callbackName];
     };
     GoogleRecaptcha.prototype.render = function () {
         var _this = this;
