@@ -1,9 +1,9 @@
 # react-google-invisible-recaptcha #
 
-A React component which is simply interested in Google invisible reCAPTCHA.
+A React component which is interested in only Google invisible reCAPTCHA.
 
 * Support multiple reCAPTCHA widgets on one page.
-* Vanilla JS.
+* Support React hooks.
 
 ## [Demo][demo] ##
 
@@ -13,44 +13,7 @@ When reCAPTCHA is resolved, the demo page shows the result token for demo purpos
 
 ## Example ##
 
-Below is a component which coordinates the procedure.
-
-```js
-class Example extends React.Component {
-  constructor( props ) {
-    super( props );
-    this.state = { value: '' };
-    this.onSubmit = this.onSubmit.bind( this );
-    this.onResolved = this.onResolved.bind( this );
-  }
-  render() {
-    return (
-      <div>
-        <input
-          type="text"
-          value={ this.state.value }
-          onChange={ event => this.setState( { value: event.target.value } ) } />
-        <button onClick={ this.onSubmit }>Submit</button>
-        <Recaptcha
-          ref={ ref => this.recaptcha = ref }
-          sitekey="<sitekey>"
-          onResolved={ this.onResolved } />
-      </div>
-    );
-  }
-  onSubmit() {
-    if ( '' == this.state.value ) {
-      alert( 'Validation failed! Input cannot be empty.' );
-      this.recaptcha.reset();
-    } else {
-      this.recaptcha.execute();
-    }
-  }
-  onResolved() {
-    alert( 'Recaptcha resolved with response: ' + this.recaptcha.getResponse() );
-  }
-}
-```
+See the `example/` folder for an example.
 
 ## Install ##
 
@@ -64,9 +27,9 @@ npm install react-google-invisible-recaptcha --save
 import Recaptcha from 'react-google-invisible-recaptcha';
 
 <Recaptcha
-  ref={ ref => this.recaptcha = ref }
-  sitekey={ <sitekey> }
-  onResolved={ () => console.log( 'Human detected.' ) } />
+  ref={refRecaptcha}
+  sitekey={<sitekey>}
+  onResolved={() => console.log('Human detected.')} />
 ```
 
 ## Configuration ##
@@ -80,22 +43,40 @@ A few optional props you can tweak.
 * badge: `bottomright`, `bottomleft`, or `inline`. **Default: bottomright.**
 * locale: in which language it speaks. **Default: en.**
 * nonce: nonce included in the reCAPTCHA script tag. **Default: undefined.**
-* onResolved: callback when the recaptcha is resolved. **Default: noop.**
-* onError: callback when the recaptcha encounters an error. **Default: noop.**
 * onExpired: callback when the recaptcha response expires. **Default: noop.**
+* onError: callback when the recaptcha encounters an error. **Default: noop.**
 * onLoaded: callback when the recaptcha is loaded. **Default: noop.**
+* onResolved: callback when the recaptcha is resolved. **Default: noop.**
 * style: custom CSS applied to the root node. **Default: undefined.**
 * tabindex: tabindex of the challenge. **Default: 0.**
 
 ## APIs ##
 
 ```js
-<Recaptcha ref={ ref => this.recaptcha = ref } ... />
+// Functional component with React hooks.
+const refRecaptcha = React.useRef(null);
+<Recaptcha ref={refRecaptcha} ... />
+
+// Class component.
+this.refRecaptcha = React.createRef();
+<Recaptcha ref={refRecaptcha} ... />
+
+// refRecaptcha.current.callbacks.execute function which invokes the reCAPTCHA check.
+// refRecaptcha.current.callbacks.reset function which resets the reCAPTCHA widget.
+// refRecaptcha.current.callbacks.getResponse function which returns the response token.
 ```
 
-* _this.recaptcha.execute_ function which invokes the reCAPTCHA check.
-* _this.recaptcha.reset_ function which resets the reCAPTCHA widget.
-* _this.recaptcha.getResponse_ function which returns the response token.
+## Migration from 0.x to 1.0.0
+
+```js
+// version 0.x
+<Recaptcha ref={ref => this.recaptcha = ref} ... />
+// this.recaptcha.execute invokes the reCAPTCHA check.
+
+// version 1.0.0
+<Recaptcha ref={refRecaptcha} ... />
+// refRecaptcha.current.callbacks.execute invokes the reCAPTCHA check.
+```
 
 ## License ##
 

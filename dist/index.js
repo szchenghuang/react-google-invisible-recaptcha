@@ -6,27 +6,19 @@ Object.defineProperty(exports, "__esModule", {
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
-
-var _propTypes = require('prop-types');
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _v = require('uuid/v4');
 
 var _v2 = _interopRequireDefault(_v);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var renderers = [];
 
@@ -51,102 +43,101 @@ var injectScript = function injectScript(locale, nonce) {
   document.body.appendChild(script);
 };
 
-var GoogleRecaptcha = function (_React$Component) {
-  _inherits(GoogleRecaptcha, _React$Component);
+var defaultProps = {
+  badge: 'bottomright',
+  locale: '',
+  onExpired: function onExpired() {},
+  onError: function onError() {},
+  onLoaded: function onLoaded() {},
+  onResolved: function onResolved() {},
+  tabindex: 0
+};
 
-  function GoogleRecaptcha() {
-    _classCallCheck(this, GoogleRecaptcha);
-
-    return _possibleConstructorReturn(this, (GoogleRecaptcha.__proto__ || Object.getPrototypeOf(GoogleRecaptcha)).apply(this, arguments));
-  }
-
-  _createClass(GoogleRecaptcha, [{
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      var _this2 = this;
-
-      var _props = this.props,
-          badge = _props.badge,
-          locale = _props.locale,
-          nonce = _props.nonce,
-          onExpired = _props.onExpired,
-          onError = _props.onError,
-          onLoaded = _props.onLoaded,
-          onResolved = _props.onResolved,
-          sitekey = _props.sitekey,
-          tabindex = _props.tabindex;
+function GoogleRecaptcha(props, refContainer) {
+  var _props$badge = props.badge,
+      badge = _props$badge === undefined ? defaultProps.badge : _props$badge,
+      _props$locale = props.locale,
+      locale = _props$locale === undefined ? defaultProps.locale : _props$locale,
+      nonce = props.nonce,
+      _props$onExpired = props.onExpired,
+      onExpired = _props$onExpired === undefined ? defaultProps.onExpired : _props$onExpired,
+      _props$onError = props.onError,
+      onError = _props$onError === undefined ? defaultProps.onError : _props$onError,
+      _props$onLoaded = props.onLoaded,
+      onLoaded = _props$onLoaded === undefined ? defaultProps.onLoaded : _props$onLoaded,
+      _props$onResolved = props.onResolved,
+      onResolved = _props$onResolved === undefined ? defaultProps.onResolved : _props$onResolved,
+      sitekey = props.sitekey,
+      style = props.style,
+      _props$tabindex = props.tabindex,
+      tabindex = _props$tabindex === undefined ? defaultProps.tabindex : _props$tabindex;
 
 
-      this.callbackName = 'GoogleRecaptchaResolved-' + (0, _v2.default)();
-      window[this.callbackName] = onResolved;
+  var callbackName = 'GoogleRecaptchaResolved-' + (0, _v2.default)();
 
-      var loaded = function loaded() {
-        if (_this2.container) {
-          var wrapper = document.createElement('div');
-          // This wrapper must be appended to the DOM immediately before rendering
-          // reCaptcha. Otherwise multiple reCaptchas will act jointly somehow.
-          _this2.container.appendChild(wrapper);
-          var recaptchaId = window.grecaptcha.render(wrapper, {
-            badge: badge,
-            callback: _this2.callbackName,
-            'error-callback': onError,
-            'expired-callback': onExpired,
-            sitekey: sitekey,
-            size: 'invisible',
-            tabindex: tabindex
-          });
-          _this2.execute = function () {
+  _react2.default.useEffect(function () {
+    window[callbackName] = onResolved;
+
+    var domNode = refContainer.current;
+    var callbacks = {};
+
+    var loaded = function loaded() {
+      if (refContainer.current) {
+        var wrapper = document.createElement('div');
+        // This wrapper must be appended to the DOM immediately before rendering
+        // reCaptcha. Otherwise multiple reCaptchas will act jointly somehow.
+        refContainer.current.appendChild(wrapper);
+        var recaptchaId = window.grecaptcha.render(wrapper, {
+          badge: badge,
+          callback: callbackName,
+          'error-callback': onError,
+          'expired-callback': onExpired,
+          sitekey: sitekey,
+          size: 'invisible',
+          tabindex: tabindex
+        });
+        refContainer.current.callbacks = {
+          execute: function execute() {
             return window.grecaptcha.execute(recaptchaId);
-          };
-          _this2.reset = function () {
+          },
+          reset: function reset() {
             return window.grecaptcha.reset(recaptchaId);
-          };
-          _this2.getResponse = function () {
+          },
+          getResponse: function getResponse() {
             return window.grecaptcha.getResponse(recaptchaId);
-          };
-          onLoaded();
-        }
-      };
+          }
+        };
+        callbacks = _extends({}, refContainer.current.callbacks);
+        onLoaded();
+      }
+    };
 
-      if (window.grecaptcha && window.grecaptcha.render && window.grecaptcha.execute && window.grecaptcha.reset && window.grecaptcha.getResponse) {
-        loaded();
-      } else {
-        renderers.push(loaded);
-        if (!document.querySelector('#recaptcha')) {
-          injectScript(locale, nonce);
-        }
+    if (window.grecaptcha && window.grecaptcha.render && window.grecaptcha.execute && window.grecaptcha.reset && window.grecaptcha.getResponse) {
+      loaded();
+    } else {
+      renderers.push(loaded);
+      if (!document.querySelector('#recaptcha')) {
+        injectScript(locale, nonce);
       }
     }
-  }, {
-    key: 'componentWillUnmount',
-    value: function componentWillUnmount() {
-      while (this.container.firstChild) {
-        this.container.removeChild(this.container.firstChild);
+
+    return function () {
+      while (domNode.firstChild) {
+        domNode.removeChild(domNode.firstChild);
       }
+
       // There is a chance that the reCAPTCHA API lib is not loaded yet, so check
       // before invoking reset.
-      if (this.reset) {
-        this.reset();
+      if (callbacks.reset) {
+        callbacks.reset();
       }
-      delete window[this.callbackName];
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      var _this3 = this;
 
-      var style = this.props.style;
+      delete window[callbackName];
+    };
+  }, []);
 
-      return _react2.default.createElement('div', _extends({
-        ref: function ref(_ref) {
-          return _this3.container = _ref;
-        }
-      }, style && { style: style }));
-    }
-  }]);
-
-  return GoogleRecaptcha;
-}(_react2.default.Component);
+  return _react2.default.createElement('div', _extends({ ref: refContainer }, style && { style: style }));
+}
 
 GoogleRecaptcha.propTypes = {
   badge: _propTypes2.default.oneOf(['bottomright', 'bottomleft', 'inline']),
@@ -161,14 +152,6 @@ GoogleRecaptcha.propTypes = {
   tabindex: _propTypes2.default.number
 };
 
-GoogleRecaptcha.defaultProps = {
-  badge: 'bottomright',
-  locale: '',
-  onExpired: function onExpired() {},
-  onError: function onError() {},
-  onLoaded: function onLoaded() {},
-  onResolved: function onResolved() {},
-  tabindex: 0
-};
+GoogleRecaptcha.defaultProps = defaultProps;
 
-exports.default = GoogleRecaptcha;
+exports.default = _react2.default.forwardRef(GoogleRecaptcha);
