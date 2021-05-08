@@ -4,6 +4,21 @@ A React component which is interested in only Google invisible reCAPTCHA.
 
 * Support multiple reCAPTCHA widgets on one page.
 * Support React hooks.
+* Support Typescript.
+
+## Migration from 0.x to 1.0.0
+
+```js
+// Version 0.x
+<Recaptcha ref={ref => this.recaptcha = ref} ... />
+// this.recaptcha.execute invokes the reCAPTCHA check.
+
+// Version 1.0.0
+const refCaptcha = React.useRef(null) // or React.createRef().
+<Recaptcha ref={refRecaptcha} ... />
+// refRecaptcha.current.callbacks.execute invokes the reCAPTCHA check.
+//             ^^^^^^^^^^^^^^^^^^
+```
 
 ## [Demo][demo] ##
 
@@ -27,9 +42,9 @@ npm install react-google-invisible-recaptcha --save
 import Recaptcha from 'react-google-invisible-recaptcha';
 
 <Recaptcha
+  onResolved={() => console.log('Human detected.')} />
   ref={refRecaptcha}
   sitekey={<sitekey>}
-  onResolved={() => console.log('Human detected.')} />
 ```
 
 ## Configuration ##
@@ -64,18 +79,6 @@ this.refRecaptcha = React.createRef();
 // refRecaptcha.current.callbacks.execute function which invokes the reCAPTCHA check.
 // refRecaptcha.current.callbacks.reset function which resets the reCAPTCHA widget.
 // refRecaptcha.current.callbacks.getResponse function which returns the response token.
-```
-
-## Migration from 0.x to 1.0.0
-
-```js
-// version 0.x
-<Recaptcha ref={ref => this.recaptcha = ref} ... />
-// this.recaptcha.execute invokes the reCAPTCHA check.
-
-// version 1.0.0
-<Recaptcha ref={refRecaptcha} ... />
-// refRecaptcha.current.callbacks.execute invokes the reCAPTCHA check.
 ```
 
 ## License ##

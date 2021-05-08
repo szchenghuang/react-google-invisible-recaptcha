@@ -1,10 +1,16 @@
 'use strict';
 
-import React from 'react';
-import ReactDOM from 'react-dom';
-import Recaptcha from '../';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import Recaptcha from '../dist';
 
-function FunctionalComponent(props) {
+import type { Callbacks } from '../dist';
+
+type Props = {
+  name: string;
+}
+
+function FunctionalComponent(props: Props) {
   const { name } = props;
 
   const [value, setValue] = React.useState('');
@@ -55,8 +61,15 @@ function FunctionalComponent(props) {
   );
 }
 
-class ClassComponent extends React.Component {
-  constructor(props) {
+type State = {
+  resolved: boolean;
+  value: string;
+};
+
+class ClassComponent extends React.Component<Props, State> {
+  refRecaptcha: React.RefObject<HTMLDivElement & { callbacks?: Callbacks }>;
+
+  constructor(props: Props) {
     super(props);
     this.state = { value: '', resolved: false };
     this.refRecaptcha = React.createRef();

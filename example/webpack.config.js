@@ -10,33 +10,38 @@ const PATHS = {
 };
 
 const config = {
-  entry: [
-    PATHS.src
-  ],
+  entry: [PATHS.src],
+  mode: 'production',
   output: {
     path: PATHS.build,
     publicPath: './',
     filename: 'bundle.js'
   },
   resolve: {
-    extensions: [ '.js', '.jsx' ]
+    extensions: ['.js', '.tsx']
   },
   module: {
-    rules: [ {
-      test: /\.css$/,
-      enforce: 'pre',
-      loaders: [ 'postcss-loader' ],
-      include: [ PATHS.lib, PATHS.src ]
+    rules: [{
+      test: /\.js$/,
+      loader: 'babel-loader',
+      options: {
+        presets: ['@babel/preset-env']
+      },
+      include: [PATHS.src]
     }, {
-      test: /\.jsx?$/,
-      loaders: [ 'babel-loader' ],
-      include: [ PATHS.lib, PATHS.src ]
-    } ]
+      test: /\.tsx$/,
+      loader: 'babel-loader',
+      options: {
+        presets: ['@babel/preset-env', '@babel/preset-typescript']
+      },
+      include: [PATHS.src]
+    }],
   },
   plugins: [
     new HTMLWebpackPlugin({
+      minify: false,
       filename: 'index.html',
-      template: Path.join( PATHS.src, 'index.html' )
+      template: Path.join(PATHS.src, 'index.html')
     })
   ]
 };
