@@ -24,7 +24,7 @@
     "prebuild:example": "rm -rf docs && mkdir docs",
     "build:example": "webpack --config ./example/webpack.config.js",
     "prebuild": "rm -rf dist && mkdir dist ",
-    "build": "babel ./src --out-dir ./dist",
+    "build": "babel ./src --out-dir ./dist; cp src/index.d.ts dist/",
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
@@ -62,5 +62,6 @@
   "directories": {
     "doc": "docs",
     "example": "example"
-  }
+  },
+  "types": "dist/index.d.ts"
 }
