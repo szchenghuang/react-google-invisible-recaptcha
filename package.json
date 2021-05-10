@@ -1,7 +1,7 @@
 {
   "name": "react-google-invisible-recaptcha",
   "author": "szchenghuang <szchenghuang@gmail.com>",
-  "version": "0.3.0-rc.1",
+  "version": "1.0.0-rc.0",
   "description": "A React component which is simply interested in Google invisible reCaptcha.",
   "main": "dist/index.js",
   "keywords": [
