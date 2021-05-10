@@ -33,6 +33,11 @@ See the `example/` folder for an example.
 ## Install ##
 
 ```sh
+// 1.0.0 prerelease.
+npm install react-google-invisible-recaptcha@next --save
+```
+
+```sh
 npm install react-google-invisible-recaptcha --save
 ```
 
