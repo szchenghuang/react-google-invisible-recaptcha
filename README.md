@@ -1,3 +1,25 @@
+# Migration from 0.x to 1.0.0
+
+Version 1.0.0 is going to have breaking changes in the API:
+
+```js
+// Version 0.x
+<Recaptcha ref={ref => this.recaptcha = ref} ... />
+// this.recaptcha.execute invokes the reCAPTCHA check.
+
+// Version 1.0.0
+const refCaptcha = React.useRef(null) // or React.createRef().
+<Recaptcha ref={refRecaptcha} ... />
+// refRecaptcha.current.callbacks.execute invokes the reCAPTCHA check.
+//             ^^^^^^^^^^^^^^^^^^
+```
+
+It will support React hooks and Typescript out of the box. Navigate to the [versions][versions] page for the release candidates, say [1.0.0-rc.2][1.0.0-rc.2], and install by
+
+```sh
+npm i react-google-invisible-recaptcha@1.0.0-rc.2
+```
+
 # react-google-invisible-recaptcha #
 
 A React component which is simply interested in Google invisible reCAPTCHA.
@@ -102,3 +124,5 @@ A few optional props you can tweak.
 MIT. See [LICENSE.md](http://github.com/szchenghuang/react-google-invisible-recaptcha/blob/master/LICENSE.md) for details.
 
 [demo]: https://szchenghuang.github.io/react-google-invisible-recaptcha/
+[versions]: https://www.npmjs.com/package/react-google-invisible-recaptcha?activeTab=versions
+[1.0.0-rc.2]: https://www.npmjs.com/package/react-google-invisible-recaptcha/v/1.0.0-rc.2
