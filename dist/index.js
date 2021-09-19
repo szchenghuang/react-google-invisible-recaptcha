@@ -106,7 +106,7 @@ var GoogleRecaptcha = /*#__PURE__*/React.forwardRef(function (props, ref) {
           tabindex: tabindex
         });
 
-        if (_recaptchaId) {
+        if (_recaptchaId !== undefined && _recaptchaId !== null) {
           ref.current.callbacks = {
             execute: function execute() {
               var _window$grecaptcha$ex, _window$grecaptcha2;
