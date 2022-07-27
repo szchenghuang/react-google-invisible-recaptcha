@@ -47,9 +47,9 @@ npm install react-google-invisible-recaptcha --save
 import Recaptcha from 'react-google-invisible-recaptcha';
 
 <Recaptcha
-  onResolved={() => console.log('Human detected.')} />
+  onResolved={() => console.log('Human detected.')} 
   ref={refRecaptcha}
-  sitekey={<sitekey>}
+  sitekey={<sitekey>} />
 ```
 
 ## Configuration ##
